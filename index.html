@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moav - Document (Persistent)</title>
+    <!-- SheetJS library for Excel export -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text: #1a1a2e;
+            --text-light: #555;
+            --border: #e0e5ec;
+            --accent: #4f6ef7;
+            --accent-hover: #3b54d4;
+            --danger: #e74c3c;
+            --danger-hover: #c0392b;
+            --success: #27ae60;
+            --shadow: 0 4px 20px rgba(0,0,0,0.06);
+            --radius: 12px;
+            --transition: 0.2s ease;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 16px 60px;
+            line-height: 1.6;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .header { text-align: center; }
+        .header h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+        .header .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            letter-spacing: 0.3px;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 30px;
+            box-shadow: var(--shadow);
+        }
+        .card h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card h2 .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: #eef1ff;
+            font-size: 1rem;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px 14px;
+            font-size: 0.95rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            background: #fafbfc;
+            color: var(--text);
+            transition: var(--transition);
+            outline: none;
+            font-family: inherit;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(79,110,247,0.08);
+            background: #fff;
+        }
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 38px;
+        }
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 11px 22px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 0.2px;
+            font-family: inherit;
+        }
+        .btn-add {
+            background: var(--accent);
+            color: #fff;
+        }
+        .btn-add:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(79,110,247,0.25);
+        }
+        .btn-download {
+            background: #fff;
+            color: var(--accent);
+            border: 1.5px solid var(--accent);
+        }
+        .btn-download:hover {
+            background: #eef1ff;
+            border-color: var(--accent-hover);
+            color: var(--accent-hover);
+        }
+        .btn-clear {
+            background: #fff;
+            color: var(--danger);
+            border: 1.5px solid var(--danger);
+        }
+        .btn-clear:hover {
+            background: #fdecea;
+            border-color: var(--danger-hover);
+            color: var(--danger-hover);
+        }
+        .btn-delete-row {
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid transparent;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        .btn-delete-row:hover {
+            background: #fdecea;
+            border-color: #f5c6cb;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 550px;
+        }
+        thead {
+            background: #f8f9fb;
+        }
+        thead th {
+            padding: 13px 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--text-light);
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+        tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f2f5;
+            vertical-align: middle;
+        }
+        tbody tr { transition: background 0.15s ease; }
+        tbody tr:hover { background: #fafbfd; }
+        tbody tr:last-child td { border-bottom: none; }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .badge-paid { background: #e6f9ee; color: #1e7e34; }
+        .badge-unpaid { background: #fef3e4; color: #b85c1a; }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+        .empty-state .empty-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .record-count {
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 0.85rem;
+        }
+        .persistence-note {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📄 Mova</h1>
+            <p class="subtitle">Record &amp; Export Payment Data — <strong>data saved automatically</strong></p>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Enter Details</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="inputName">Name</label>
+                    <input type="text" id="inputName" placeholder="e.g. John Doe" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="inputHometown">Hometown</label>
+                    <input type="text" id="inputHometown" placeholder="e.g. New York" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="inputAmount">Amount</label>
+                    <input type="number" id="inputAmount" placeholder="0.00" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="inputPaid">Paid</label>
+                    <select id="inputPaid">
+                        <option value="TRUE">✅ TRUE</option>
+                        <option value="FALSE">❌ FALSE</option>
+                    </select>
+                </div>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-add" id="btnAdd">➕ Add Record</button>
+                <button class="btn btn-download" id="btnDownload">📥 Download Excel</button>
+                <button class="btn btn-clear" id="btnClearAll">🗑️ Clear All</button>
+            </div>
+            <div class="persistence-note">
+                💾 <span>Data is automatically saved to your browser. You can close or refresh the page — it will still be here.</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>
+                <span class="icon">📋</span> Recorded Entries
+                <span class="record-count" id="recordCount">(0 records)</span>
+            </h2>
+            <div class="table-wrapper">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Hometown</th>
+                            <th>Amount</th>
+                            <th>Paid</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+                <div class="empty-state" id="emptyState">
+                    <span class="empty-icon">📭</span>
+                    No records yet. Add one using the form above.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ── Storage Key ──────────────────────
+            const STORAGE_KEY = 'mova_records';
+
+            // ── State: array of records ──────────
+            let records = [];
+
+            // ── DOM refs ─────────────────────────
+            const inputName = document.getElementById('inputName');
+            const inputHometown = document.getElementById('inputHometown');
+            const inputAmount = document.getElementById('inputAmount');
+            const inputPaid = document.getElementById('inputPaid');
+            const btnAdd = document.getElementById('btnAdd');
+            const btnDownload = document.getElementById('btnDownload');
+            const btnClearAll = document.getElementById('btnClearAll');
+            const tableBody = document.getElementById('tableBody');
+            const emptyState = document.getElementById('emptyState');
+            const recordCount = document.getElementById('recordCount');
+            const dataTable = document.getElementById('dataTable');
+
+            // ── Load persisted records ───────────
+            function loadFromStorage() {
+                try {
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    if (stored) {
+                        const parsed = JSON.parse(stored);
+                        if (Array.isArray(parsed)) {
+                            records = parsed;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Could not load saved data, starting fresh.', e);
+                    records = [];
+                }
+            }
+
+            // ── Save current records to storage ──
+            function saveToStorage() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+                } catch (e) {
+                    console.warn('Could not save data to localStorage.', e);
+                }
+            }
+
+            // ── Helper: format currency ──────────
+            function formatAmount(value) {
+                const num = parseFloat(value);
+                if (isNaN(num)) return '$0.00';
+                return '$' + num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            }
+
+            // ── Render table ─────────────────────
+            function renderTable() {
+                tableBody.innerHTML = '';
+
+                if (records.length === 0) {
+                    emptyState.style.display = 'block';
+                    dataTable.style.display = 'none';
+                    recordCount.textContent = '(0 records)';
+                    return;
+                }
+
+                emptyState.style.display = 'none';
+                dataTable.style.display = 'table';
+                recordCount.textContent = `(${records.length} record${records.length > 1 ? 's' : ''})`;
+
+                records.forEach((rec, index) => {
+                    const tr = document.createElement('tr');
+
+                    const tdIndex = document.createElement('td');
+                    tdIndex.textContent = index + 1;
+                    tr.appendChild(tdIndex);
+
+                    const tdName = document.createElement('td');
+                    tdName.textContent = rec.name;
+                    tr.appendChild(tdName);
+
+                    const tdHometown = document.createElement('td');
+                    tdHometown.textContent = rec.hometown;
+                    tr.appendChild(tdHometown);
+
+                    const tdAmount = document.createElement('td');
+                    tdAmount.textContent = formatAmount(rec.amount);
+                    tdAmount.style.fontWeight = '600';
+                    tr.appendChild(tdAmount);
+
+                    const tdPaid = document.createElement('td');
+                    const badge = document.createElement('span');
+                    if (rec.paid === 'TRUE') {
+                        badge.className = 'badge badge-paid';
+                        badge.textContent = '✅ Paid';
+                    } else {
+                        badge.className = 'badge badge-unpaid';
+                        badge.textContent = '❌ Unpaid';
+                    }
+                    tdPaid.appendChild(badge);
+                    tr.appendChild(tdPaid);
+
+                    const tdAction = document.createElement('td');
+                    const btnDelete = document.createElement('button');
+                    btnDelete.className = 'btn-delete-row';
+                    btnDelete.textContent = '🗑️ Delete';
+                    btnDelete.addEventListener('click', () => {
+                        deleteRecord(index);
+                    });
+                    tdAction.appendChild(btnDelete);
+                    tr.appendChild(tdAction);
+
+                    tableBody.appendChild(tr);
+                });
+            }
+
+            // ── Delete record and persist ────────
+            function deleteRecord(index) {
+                if (index >= 0 && index < records.length) {
+                    records.splice(index, 1);
+                    saveToStorage();
+                    renderTable();
+                }
+            }
+
+            // ── Add record and persist ───────────
+            function addRecord() {
+                const name = inputName.value.trim();
+                const hometown = inputHometown.value.trim();
+                const amountRaw = inputAmount.value.trim();
+                const paid = inputPaid.value;
+
+                if (!name) { alert('⚠️ Please enter a Name.'); inputName.focus(); return; }
+                if (!hometown) { alert('⚠️ Please enter a Hometown.'); inputHometown.focus(); return; }
+                if (!amountRaw) { alert('⚠️ Please enter an Amount.'); inputAmount.focus(); return; }
+                const amountNum = parseFloat(amountRaw);
+                if (isNaN(amountNum) || amountNum < 0) {
+                    alert('⚠️ Please enter a valid positive number for Amount.');
+                    inputAmount.focus();
+                    return;
+                }
+
+                records.push({
+                    name: name,
+                    hometown: hometown,
+                    amount: amountNum,
+                    paid: paid,
+                });
+
+                // Clear form
+                inputName.value = '';
+                inputHometown.value = '';
+                inputAmount.value = '';
+                inputPaid.value = 'TRUE';
+
+                saveToStorage();
+                renderTable();
+                inputName.focus();
+            }
+
+            // ── Download Excel (unchanged) ───────
+            function downloadExcel() {
+                if (records.length === 0) {
+                    alert('📭 No records to download. Please add at least one record first.');
+                    return;
+                }
+                const headerRow = ['No', 'Name', 'Hometown', 'Amount', 'Paid'];
+                const dataRows = records.map((rec, index) => [
+                    index + 1,
+                    rec.name,
+                    rec.hometown,
+                    rec.amount,
+                    rec.paid === 'TRUE' ? 'Paid' : 'Unpaid',
+                ]);
+                const sheetData = [headerRow, ...dataRows];
+                const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
+                worksheet['!cols'] = [
+                    { wch: 5 }, { wch: 22 }, { wch: 22 }, { wch: 14 }, { wch: 12 }
+                ];
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Mova Records');
+                const now = new Date();
+                const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
+                XLSX.writeFile(workbook, `Mova_Records_${timestamp}.xlsx`);
+            }
+
+            // ── Clear all records and storage ────
+            function clearAllRecords() {
+                if (records.length === 0) {
+                    alert('📭 No records to clear.');
+                    return;
+                }
+                const confirmed = confirm(`Delete all ${records.length} record(s)? This cannot be undone.`);
+                if (confirmed) {
+                    records = [];
+                    saveToStorage();
+                    renderTable();
+                }
+            }
+
+            // ── Event listeners ──────────────────
+            btnAdd.addEventListener('click', addRecord);
+            [inputName, inputHometown, inputAmount, inputPaid].forEach(el => {
+                el.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addRecord();
+                    }
+                });
+            });
+            btnDownload.addEventListener('click', downloadExcel);
+            btnClearAll.addEventListener('click', clearAllRecords);
+
+            // ── Initialise: load data, then render ──
+            loadFromStorage();
+            renderTable();
+            inputName.focus();
+
+            console.log('✅ Moav ready — data persists in localStorage.');
+        })();
+    </script>
+</body>
+</html>
