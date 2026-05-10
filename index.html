@@ -1,393 +1,642 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Moav · Persistent Records (n field)</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MOVA ID</title>
+
+    <!-- QR Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode">
+    </script>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCQi9qjhhgh1VBBQIGA6NHyjQy0bdLmuWI",
+            authDomain: "mova-id.firebaseapp.com",
+            databaseURL: "https://mova-id-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "mova-id",
+            storageBucket: "mova-id.firebasestorage.app",
+            messagingSenderId: "1032823619174",
+            appId: "1:1032823619174:web:b3dc46b0cb442e51caf7a7",
+            measurementId: "G-2BLNYQE0YT",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // ---- Search function (unchanged logic, adapted UI) ----
+        async function searchUser(id) {
+            if (!id) {
+                showToast("⚠️ Please enter an ID Number", "warning");
+                return;
+            }
+
+            const resultCard = document.getElementById("result");
+            const loader = document.getElementById("loader");
+            const placeholder = document.getElementById("placeholderState");
+
+            resultCard.style.display = "none";
+            placeholder.style.display = "none";
+            loader.style.display = "flex";
+
+            try {
+                const dbRef = ref(db);
+                const snapshot = await get(child(dbRef, "users/" + id));
+                await new Promise((r) => setTimeout(r, 600));
+                loader.style.display = "none";
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    document.getElementById("userPhoto").src = data.photo || "";
+                    document.getElementById("userName").innerText = data.name || "—";
+                    document.getElementById("userId").innerText = data.id || "—";
+                    document.getElementById("userPhone").innerText = data.phone || "—";
+                    document.getElementById("userEmail").innerText = data.email || "—";
+                    document.getElementById("userAddress").innerText = data.address || "—";
+
+                    resultCard.style.display = "block";
+                    requestAnimationFrame(() => {
+                        resultCard.classList.add("visible");
+                    });
+                    showToast("✅ ID found!", "success");
+                } else {
+                    placeholder.style.display = "flex";
+                    showToast("❌ User Not Found", "error");
+                }
+            } catch (error) {
+                console.error(error);
+                loader.style.display = "none";
+                placeholder.style.display = "flex";
+                showToast("⚠️ Error Fetching Data", "error");
+            }
+        }
+
+        function showToast(message, type) {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            toast.className = "toast " + type + " show";
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2800);
+        }
+
+        // ---- Button: SUMMIT ----
+        window.submitID = function () {
+            const id = document.getElementById("searchInput").value.trim();
+            const resultCard = document.getElementById("result");
+            resultCard.classList.remove("visible");
+            searchUser(id);
+        };
+
+        // ---- Enter key support ----
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("searchInput").addEventListener("keydown", function (e) {
+                if (e.key === "Enter") {
+                    window.submitID();
+                }
+            });
+
+            // SCAN button logic: open modal with scanner
+            document.getElementById("openScannerBtn").addEventListener("click", openScannerModal);
+            document.getElementById("closeScannerModal").addEventListener("click", closeScannerModal);
+        });
+
+        // ---- QR SCANNER (modal) ----
+        let html5QrCode = null;
+
+        function openScannerModal() {
+            document.getElementById("scannerModal").style.display = "flex";
+            const readerDiv = document.getElementById("reader");
+            readerDiv.innerHTML = ""; // clear previous instance
+
+            html5QrCode = new Html5Qrcode("reader");
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 250 },
+                (decodedText) => {
+                    // On successful scan
+                    document.getElementById("searchInput").value = decodedText;
+                    closeScannerModal();
+                    window.submitID();
+                },
+                (errorMessage) => {
+                    // ignore scan errors
+                }
+            ).catch(err => {
+                console.error("Camera start failed:", err);
+                showToast("Camera error. Check permissions.", "error");
+                closeScannerModal();
+            });
+        }
+
+        function closeScannerModal() {
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    html5QrCode.clear();
+                    html5QrCode = null;
+                }).catch(err => console.error("Stop scanner failed:", err));
+            }
+            document.getElementById("scannerModal").style.display = "none";
+        }
+
+        window.showToast = showToast;
+    </script>
+
     <style>
+        :root {
+            --bg: #f4f7fc;
+            --surface: #ffffff;
+            --primary: #2a3b8f;
+            --primary-dark: #1c2a6b;
+            --primary-light: #e8edff;
+            --accent: #d63384;
+            --accent-light: #fde8f2;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow: 0 8px 30px rgba(0,0,0,0.08);
+            --shadow-lg: 0 20px 50px rgba(0,0,0,0.12);
+            --radius: 20px;
+            --radius-sm: 14px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
+
         body {
-            background: #f1f5f9;
-            padding: 2rem 1.5rem;
-            color: #0f172a;
-        }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .header {
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1e293b, #2d3a4b);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-        .subtitle {
-            color: #334155;
-            margin-top: 0.5rem;
-            font-size: 0.95rem;
-        }
-        .card {
-            background: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.05);
-            padding: 1.5rem 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid #e9edf2;
-        }
-        .card h2 {
+            background: linear-gradient(145deg, #e9eff7 0%, #f3f6fd 100%);
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 1.5rem;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 440px;
+            background: var(--surface);
+            border-radius: 36px;
+            box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.8) inset;
+            padding: 32px 24px 28px;
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .header .logo-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 10px;
+            background: linear-gradient(135deg, #2a3b8f, #4f6ef7);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(42, 59, 143, 0.3);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--primary-dark);
+        }
+
+        .header h1 span {
+            background: linear-gradient(135deg, #2a3b8f, #d63384);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ID Entry Section */
+        .id-entry {
+            background: #f8fafd;
+            border-radius: var(--radius);
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .id-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .id-input {
+            width: 100%;
+            padding: 16px 18px;
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid #3b82f6;
-            padding-left: 0.75rem;
+            border: 2px solid #e0e5ef;
+            border-radius: var(--radius-sm);
+            background: white;
+            outline: none;
+            color: var(--text);
+            transition: var(--transition);
+            letter-spacing: 0.2px;
         }
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 1.8rem;
+
+        .id-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(42, 59, 143, 0.08);
         }
-        .form-group {
+
+        .id-input::placeholder {
+            color: #b9c2d0;
+            font-weight: 400;
+            font-size: 0.95rem;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 10px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-summit {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 8px 20px rgba(42, 59, 143, 0.3);
+        }
+
+        .btn-summit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(42, 59, 143, 0.4);
+        }
+
+        .btn-scan {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+
+        .btn-scan:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-dark);
+        }
+
+        /* Loader */
+        .loader-wrapper {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 0;
+            gap: 12px;
+        }
+
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 4px solid #e2e8f0;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Placeholder */
+        .placeholder-state {
             display: flex;
             flex-direction: column;
-            gap: 0.4rem;
+            align-items: center;
+            padding: 20px 0 8px;
+            color: var(--text-muted);
+            font-weight: 500;
+            gap: 6px;
+            text-align: center;
         }
-        .form-group label {
-            font-weight: 600;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #475569;
+
+        /* ID Card Result */
+        .card {
+            display: none;
+            background: white;
+            border-radius: 24px;
+            box-shadow: var(--shadow), 0 0 0 1px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-top: 16px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
-        input, select {
-            padding: 0.7rem 0.9rem;
-            border-radius: 12px;
-            border: 1px solid #cbd5e1;
-            font-size: 0.95rem;
-            transition: 0.2s;
-            outline: none;
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-        input:focus, select:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+
+        .card-banner {
+            background: linear-gradient(135deg, #1e2b6b 0%, #2a3b8f 40%, #4f6ef7 100%);
+            padding: 28px 20px 44px;
+            text-align: center;
+            position: relative;
         }
-        .btn-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 0.5rem;
+
+        .card-banner::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+            top: -40px;
+            right: -40px;
         }
-        .btn {
-            padding: 0.7rem 1.5rem;
-            font-weight: 600;
-            border-radius: 40px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: 0.2s;
-            background: #f1f5f9;
+
+        .photo-ring {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            padding: 4px;
+            background: rgba(255,255,255,0.25);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
         }
-        .btn-add { background: #0f172a; color: white; }
-        .btn-add:hover { background: #1e293b; transform: translateY(-1px); }
-        .btn-download { background: #2c5f2d; color: white; }
-        .btn-clear { background: #dc2626; color: white; }
-        .persistence-note {
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 0.75rem 1rem;
-            font-size: 0.8rem;
+
+        .photo-ring img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid white;
+            background: #d9e2f0;
+        }
+
+        .card-body {
+            padding: 20px 20px 24px;
+            background: white;
+            margin-top: -28px;
+            border-radius: 24px 24px 0 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .detail-row {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            margin-top: 0.8rem;
+            gap: 14px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: #f9fafc;
+            margin-bottom: 8px;
+            transition: var(--transition);
         }
-        .record-count {
-            font-size: 0.85rem;
-            background: #eef2ff;
-            padding: 0.2rem 0.7rem;
-            border-radius: 30px;
-            margin-left: 0.75rem;
+
+        .detail-row:hover {
+            background: #f1f5f9;
+            transform: translateX(4px);
         }
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 1.2rem;
+
+        .detail-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
+
+        .detail-icon.name { background: #eef2ff; color: #2a3b8f; }
+        .detail-icon.id { background: #fef9c3; color: #b45309; }
+        .detail-icon.phone { background: #d1fae5; color: #065f46; }
+        .detail-icon.email { background: #fce7f3; color: #be185d; }
+        .detail-icon.address { background: #e0e7ff; color: #4338ca; }
+
+        .detail-content .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #64748b;
+            font-weight: 700;
         }
-        th {
-            text-align: left;
-            padding: 1rem 0.8rem;
-            background: #f8fafc;
+
+        .detail-content .value {
             font-weight: 600;
-            border-bottom: 1px solid #e2e8f0;
+            color: var(--text);
+            word-break: break-word;
         }
-        td {
-            padding: 0.9rem 0.8rem;
-            border-bottom: 1px solid #edf2f7;
+
+        /* Modal Scanner */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
         }
-        .action-download, .action-delete {
+
+        .modal-content {
+            background: white;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 380px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 16px;
             background: none;
             border: none;
-            font-size: 1rem;
+            font-size: 28px;
             cursor: pointer;
-            padding: 0.25rem 0.7rem;
-            border-radius: 40px;
-            margin-right: 6px;
+            color: #555;
+            z-index: 10;
         }
-        .action-download { background: #eef2ff; color: #2563eb; }
-        .action-delete { background: #fee2e2; color: #b91c1c; }
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 3rem;
-            color: #64748b;
+
+        #reader {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
         }
-        .badge-true { background: #d1fae5; color: #065f46; padding: 0.2rem 0.7rem; border-radius: 40px; display: inline-block; font-size: 0.75rem; }
-        .badge-false { background: #ffe4e2; color: #9b2c1d; padding: 0.2rem 0.7rem; border-radius: 40px; }
-        footer {
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            z-index: 9999;
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
+            opacity: 0;
+            box-shadow: var(--shadow-lg);
             text-align: center;
-            margin-top: 2rem;
-            font-size: 0.75rem;
-            color: #5b6e8c;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .toast.success { background: #065f46; color: white; }
+        .toast.error { background: #991b1b; color: white; }
+        .toast.warning { background: #92400e; color: white; }
+
+        @media (max-width: 400px) {
+            .app-container { padding: 24px 18px 20px; }
+            .button-group { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <h1>📄 Mova</h1>
-        <p class="subtitle">Record &amp; Export (field <strong>"n"</strong>) — data saved automatically · individual Word downloads</p>
+    <div class="toast" id="toast"></div>
+
+    <div class="app-container">
+        <div class="header">
+            <div class="logo-icon">🪪</div>
+            <h1>MOVA<span>ID</span></h1>
+        </div>
+
+        <div class="id-entry">
+            <span class="id-label">ID</span>
+            <input type="text" id="searchInput" class="id-input" placeholder="ENTER YOUR ID" autofocus>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-summit" onclick="submitID()">SUMMIT</button>
+            <button class="btn btn-scan" id="openScannerBtn">📷 SCAN</button>
+        </div>
+
+        <!-- Loader -->
+        <div class="loader-wrapper" id="loader">
+            <div class="spinner"></div>
+            <span class="loading-text">Fetching ID data...</span>
+        </div>
+
+        <!-- Placeholder / no result -->
+        <div class="placeholder-state" id="placeholderState">
+            <span>🔍 Enter an ID or tap SCAN</span>
+            <small style="color:#94a3b8;">We'll look up your DVA card</small>
+        </div>
+
+        <!-- Result Card -->
+        <div class="card" id="result">
+            <div class="card-banner">
+                <div class="photo-ring">
+                    <img id="userPhoto" src="" alt="User Photo">
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="detail-row">
+                    <div class="detail-icon name">👤</div>
+                    <div class="detail-content">
+                        <div class="label">Full Name</div>
+                        <div class="value" id="userName">—</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-icon id">🆔</div>
+                    <div class="detail-content">
+                        <div class="label">ID Number</div>
+                        <div class="value" id="userId">—</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-icon phone">📞</div>
+                    <div class="detail-content">
+                        <div class="label">Phone</div>
+                        <div class="value" id="userPhone">—</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-icon email">✉️</div>
+                    <div class="detail-content">
+                        <div class="label">Email</div>
+                        <div class="value" id="userEmail">—</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-icon address">📍</div>
+                    <div class="detail-content">
+                        <div class="label">Address</div>
+                        <div class="value" id="userAddress">—</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="card">
-        <h2><span class="icon">📝</span> Enter Details</h2>
-        <div class="form-grid">
-            <div class="form-group">
-                <label for="inputN">n (type)</label>
-                <select id="inputN">
-                    <option value="Hearing" selected>Hearing</option>
-                    <option value="Marriage" >Marriage</option>
-                    <option value="Papa">Papa</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="inputName">Name</label>
-                <input type="text" id="inputName" placeholder="e.g. Rames" autocomplete="off">
-            </div>
-            <div class="form-group">
-                <label for="inputHometown">Hometown</label>
-                <input type="text" id="inputHometown" placeholder="e.g. Salah" autocomplete="off">
-            </div>
-            <div class="form-group">
-                <label for="inputAmount">Amount</label>
-                <input type="number" id="inputAmount" placeholder="0.00" min="0" step="0.01">
-            </div>
-            <div class="form-group">
-                <label for="inputPaidStatus">Paid</label>
-                <select id="inputPaidStatus">
-                    <option value="false">FALSE</option>
-                    <option value="true">TRUE</option>
-                </select>
-            </div>
-        </div>
-        <div class="btn-row">
-            <button class="btn btn-add" id="btnAdd">➕ Add Record</button>
-            <button class="btn btn-download" id="btnDownloadAll">📑 Download ALL (.doc)</button>
-            <button class="btn btn-clear" id="btnClearAll">🗑️ Clear All</button>
-        </div>
-        <div class="persistence-note">
-            💾 Auto‑save to localStorage. Each row’s “📄 Doc” button downloads a Word file with exact layout:<br>
-            <code>n: "..."<br>name: "..."<br>hometown: "..."<br>amount: ...<br>paid: true/false</code>
+    <!-- Scanner Modal -->
+    <div id="scannerModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeScannerModal">&times;</button>
+            <div id="reader"></div>
+            <p style="text-align:center; margin-top:12px; font-weight:500; color:#475569;">Point camera at QR code</p>
         </div>
     </div>
-
-    <div class="card">
-        <h2>
-            <span class="icon">📋</span> Recorded Entries
-            <span class="record-count" id="recordCount">(0 records)</span>
-        </h2>
-        <div class="table-wrapper">
-            <table id="dataTable">
-                <thead>
-                    <tr><th>No</th><th>n</th><th>Name</th><th>Hometown</th><th>Amount</th><th>Paid</th><th>Action</th></tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
-            <div class="empty-state" id="emptyState" style="display: none;">📭 No records yet.</div>
-        </div>
-    </div>
-    <footer>📄 Individual download → each field on a separate line, exactly as shown above.</footer>
-</div>
-
-<script>
-    let records = [];
-    const STORAGE_KEY = "mova_n_records";
-
-    function loadFromStorage() {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            try {
-                records = JSON.parse(stored);
-                records = records.map(r => ({
-                    ...r,
-                    amount: typeof r.amount === 'number' ? r.amount : parseFloat(r.amount) || 0,
-                    paid: r.paid === true || r.paid === "true"
-                }));
-            } catch(e) { records = []; }
-        }
-        // Set default record according to the new image: n:"Marriage", name:"Rames", hometown:"Salah", amount:50, paid:true
-        if (!records || records.length === 0) {
-            records = [{
-                id: Date.now(),
-                n: "Marriage",
-                name: "Rames",
-                hometown: "Salah",
-                amount: 50,
-                paid: true
-            }];
-            saveToStorage();
-        }
-    }
-
-    function saveToStorage() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-    }
-
-    function renderTable() {
-        const tbody = document.getElementById('tableBody');
-        const emptyDiv = document.getElementById('emptyState');
-        const countSpan = document.getElementById('recordCount');
-        if (records.length === 0) {
-            tbody.innerHTML = '';
-            emptyDiv.style.display = 'flex';
-            countSpan.innerText = '(0 records)';
-            return;
-        }
-        emptyDiv.style.display = 'none';
-        countSpan.innerText = `(${records.length} record${records.length !== 1 ? 's' : ''})`;
-        tbody.innerHTML = '';
-        records.forEach((rec, idx) => {
-            const row = tbody.insertRow();
-            row.insertCell(0).textContent = idx + 1;
-            row.insertCell(1).textContent = rec.fn;
-            row.insertCell(2).textContent = rec.name || '—';
-            row.insertCell(3).textContent = rec.hometown || '—';
-            row.insertCell(4).textContent = typeof rec.amount === 'number' ? rec.amount.toFixed(2) : parseFloat(rec.amount).toFixed(2);
-            const paidCell = row.insertCell(5);
-            paidCell.innerHTML = `<span class="${rec.paid ? 'badge-true' : 'badge-false'}">${rec.paid ? 'TRUE' : 'FALSE'}</span>`;
-            const actionCell = row.insertCell(6);
-            const dlBtn = document.createElement('button');
-            dlBtn.textContent = '📄 Doc';
-            dlBtn.className = 'action-download';
-            dlBtn.onclick = () => downloadSingleRecord(rec);
-            const delBtn = document.createElement('button');
-            delBtn.textContent = '🗑️';
-            delBtn.className = 'action-delete';
-            delBtn.onclick = () => deleteRecord(rec.id);
-            actionCell.appendChild(dlBtn);
-            actionCell.appendChild(delBtn);
-        });
-    }
-
-    function deleteRecord(id) {
-        records = records.filter(r => r.id !== id);
-        saveToStorage();
-        renderTable();
-    }
-
-    function addRecord() {
-        const n = document.getElementById('inputfn').value;
-        const name = document.getElementById('inputName').value.trim();
-        const hometown = document.getElementById('inputHometown').value.trim();
-        let amount = parseFloat(document.getElementById('inputAmount').value);
-        const paid = document.getElementById('inputPaidStatus').value === 'true';
-
-        if (!name) { alert("Name is required."); return; }
-        if (isNaN(amount) || amount < 0) { alert("Valid amount required."); return; }
-
-        records.push({ id: Date.now(), fn, name, hometown, amount, paid });
-        saveToStorage();
-        renderTable();
-        document.getElementById('inputName').value = '';
-        document.getElementById('inputHometown').value = '';
-        document.getElementById('inputAmount').value = '';
-        document.getElementById('inputName').focus();
-    }
-
-    function downloadSingleRecord(rec) {
-        // exact layout: each field on its own line, double-quoted strings
-        const lines = [
-            `fn: "${rec.fn}"`,
-            
-
-            `name: "${rec.name}"`,
-            `hometown: "${rec.hometown || ""}"`,
-            `amount: ${typeof rec.amount === 'number' ? rec.amount : parseFloat(rec.amount)}`,
-            `paid: ${rec.paid ? "true" : "false"}`
-        ];
-        const content = lines.join("\r\n");
-        const blob = new Blob([content], { type: "application/msword" });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.href = url;
-        link.download = `record_${rec.name || rec.n}_${rec.id}.doc`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    }
-
-    function downloadAllRecords() {
-        if (records.length === 0) { alert("No records to download."); return; }
-        let full = "";
-        records.forEach((rec, i) => {
-            full += `fn: "${rec.fn}"\r\nname: "${rec.name}"\r\nhometown: "${rec.hometown || ""}"\r\namount: ${rec.amount}\r\npaid: ${rec.paid ? "true" : "false"}`;
-            if (i !== records.length - 1) full += "\r\n\r\n";
-        });
-        const blob = new Blob([full], { type: "application/msword" });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.href = url;
-        link.download = `all_records_${Date.now()}.doc`;
-        link.click();
-        URL.revokeObjectURL(url);
-    }
-
-    function clearAll() {
-        if (records.length && confirm("Delete all records?")) {
-            records = [];
-            saveToStorage();
-            renderTable();
-        }
-    }
-
-    function init() {
-        loadFromStorage();
-        renderTable();
-        document.getElementById('btnAdd').addEventListener('click', addRecord);
-        document.getElementById('btnClearAll').addEventListener('click', clearAll);
-        document.getElementById('btnDownloadAll').addEventListener('click', downloadAllRecords);
-        document.getElementById('inputName').addEventListener('keypress', e => { if(e.key === 'Enter') addRecord(); });
-        document.getElementById('inputAmount').addEventListener('keypress', e => { if(e.key === 'Enter') addRecord(); });
-    }
-    init();
-</script>
 </body>
 </html>
