@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ID CHAT</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 <style>
   :root {
     --pink: #FF6B9D;
@@ -23,7 +24,6 @@
     --shadow-sm: 0 2px 12px rgba(255,107,157,0.12);
     --radius: 20px;
     --radius-sm: 12px;
-    --radius-xs: 8px;
     --msg-sent: linear-gradient(135deg, #FF6B9D, #E91E8C);
     --msg-recv: #FFFFFF;
     --online: #4CAF50;
@@ -47,133 +47,78 @@
     --msg-recv: #2A1520;
   }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body {
-    font-family:'Nunito',sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    min-height:100vh;
-    overflow:hidden;
-    transition:var(--transition);
-  }
-  /* ── LOADING SCREEN ── */
-  #loading-screen {
-    position:fixed; inset:0; z-index:9999;
-    background:linear-gradient(160deg,#FF6B9D 0%,#E91E8C 50%,#C2185B 100%);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    transition:opacity 0.6s, transform 0.6s;
-  }
+  body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow:hidden; transition:var(--transition); }
+
+  .material-icons-round { font-size:1.2rem; vertical-align:middle; line-height:1; }
+
+  /* LOADING */
+  #loading-screen { position:fixed; inset:0; z-index:9999; background:linear-gradient(160deg,#FF6B9D 0%,#E91E8C 50%,#C2185B 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; transition:opacity 0.6s, transform 0.6s; }
   #loading-screen.hide { opacity:0; pointer-events:none; transform:scale(1.05); }
   .logo-splash { font-family:'Pacifico',cursive; font-size:3rem; color:#fff; letter-spacing:2px; text-shadow:0 4px 20px rgba(0,0,0,0.3); animation:logoPop 0.8s cubic-bezier(0.175,0.885,0.32,1.275) both; }
   .logo-tagline { color:rgba(255,255,255,0.85); margin-top:8px; font-weight:600; font-size:1rem; letter-spacing:3px; text-transform:uppercase; animation:fadeUp 0.6s 0.4s both; }
   .loader-dots { display:flex; gap:8px; margin-top:40px; animation:fadeUp 0.6s 0.6s both; }
   .loader-dots span { width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,0.6); animation:dot 1.2s infinite; }
-  .loader-dots span:nth-child(2){animation-delay:0.2s;}
-  .loader-dots span:nth-child(3){animation-delay:0.4s;}
-  @keyframes dot { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
-  @keyframes logoPop { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .loader-dots span:nth-child(2){animation-delay:0.2s;} .loader-dots span:nth-child(3){animation-delay:0.4s;}
+  @keyframes dot{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
+  @keyframes logoPop{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-  /* ── SCREENS ── */
+  /* SCREENS */
   .screen { position:fixed; inset:0; display:none; flex-direction:column; overflow:hidden; animation:screenIn 0.4s cubic-bezier(0.4,0,0.2,1); }
   .screen.active { display:flex; }
-  @keyframes screenIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes screenIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-  /* ── AUTH SCREENS ── */
-  #screen-register, #screen-profile {
-    background:linear-gradient(160deg, #FF6B9D 0%, #E91E8C 40%, #FFF5F8 100%);
-    align-items:center; justify-content:flex-end; padding-bottom:0;
-  }
+  /* AUTH */
+  #screen-register, #screen-profile { background:linear-gradient(160deg,#FF6B9D 0%,#E91E8C 40%,#FFF5F8 100%); align-items:center; justify-content:flex-end; }
   .auth-top { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 24px 0; }
   .auth-logo { font-family:'Pacifico',cursive; font-size:2.6rem; color:#fff; letter-spacing:2px; text-shadow:0 4px 20px rgba(0,0,0,0.25); margin-bottom:8px; }
   .auth-subtitle { color:rgba(255,255,255,0.85); font-size:0.9rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; }
-  .auth-card {
-    background:var(--white);
-    border-radius:32px 32px 0 0;
-    padding:36px 28px 40px;
-    width:100%; max-width:480px;
-    box-shadow:0 -8px 40px rgba(255,107,157,0.2);
-    animation:slideUp 0.5s 0.2s cubic-bezier(0.4,0,0.2,1) both;
-  }
-  @keyframes slideUp { from{transform:translateY(60px);opacity:0} to{transform:translateY(0);opacity:1} }
+  .auth-card { background:var(--white); border-radius:32px 32px 0 0; padding:36px 28px 40px; width:100%; max-width:480px; box-shadow:0 -8px 40px rgba(255,107,157,0.2); animation:slideUp 0.5s 0.2s cubic-bezier(0.4,0,0.2,1) both; overflow-y:auto; max-height:75vh; }
+  @keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
   .auth-card h2 { font-size:1.6rem; font-weight:800; color:var(--text); margin-bottom:6px; }
   .auth-card p { color:var(--text-muted); font-size:0.9rem; margin-bottom:28px; }
   .field { margin-bottom:18px; }
   .field label { display:block; font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
-  .field input, .field textarea {
-    width:100%; padding:15px 18px; border:2px solid var(--border);
-    border-radius:var(--radius-sm); background:var(--pink-pale);
-    color:var(--text); font-family:'Nunito',sans-serif; font-size:1rem; font-weight:600;
-    outline:none; transition:var(--transition);
-  }
+  .field input, .field textarea { width:100%; padding:15px 18px; border:2px solid var(--border); border-radius:var(--radius-sm); background:var(--pink-pale); color:var(--text); font-family:'Nunito',sans-serif; font-size:1rem; font-weight:600; outline:none; transition:var(--transition); }
   .field input:focus, .field textarea:focus { border-color:var(--pink); background:var(--white); box-shadow:0 0 0 4px rgba(255,107,157,0.12); }
   .field textarea { resize:none; min-height:80px; }
-  .btn-primary {
-    width:100%; padding:16px; border:none; border-radius:var(--radius-sm);
-    background:linear-gradient(135deg, var(--pink), var(--pink-deep));
-    color:#fff; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:800;
-    cursor:pointer; transition:var(--transition); box-shadow:0 4px 20px rgba(233,30,140,0.4);
-    letter-spacing:0.5px;
-  }
-  .btn-primary:active { transform:scale(0.97); box-shadow:0 2px 10px rgba(233,30,140,0.3); }
-  .btn-secondary {
-    width:100%; padding:14px; border:2px solid var(--border);
-    border-radius:var(--radius-sm); background:transparent;
-    color:var(--text-muted); font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:700;
-    cursor:pointer; margin-top:12px; transition:var(--transition);
-  }
+  .btn-primary { width:100%; padding:16px; border:none; border-radius:var(--radius-sm); background:linear-gradient(135deg,var(--pink),var(--pink-deep)); color:#fff; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:800; cursor:pointer; transition:var(--transition); box-shadow:0 4px 20px rgba(233,30,140,0.4); letter-spacing:0.5px; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .btn-primary:active { transform:scale(0.97); }
+  .btn-secondary { width:100%; padding:14px; border:2px solid var(--border); border-radius:var(--radius-sm); background:transparent; color:var(--text-muted); font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:700; cursor:pointer; margin-top:12px; transition:var(--transition); display:flex; align-items:center; justify-content:center; gap:8px; }
+  .btn-danger { width:100%; padding:14px; border:2px solid #FFCDD2; border-radius:var(--radius-sm); background:transparent; color:#E53935; font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:700; cursor:pointer; margin-top:12px; transition:var(--transition); display:flex; align-items:center; justify-content:center; gap:8px; }
   .btn-secondary:active { background:var(--pink-pale); }
-  /* Profile picture upload */
+
+  /* Avatar upload */
   .avatar-upload { display:flex; flex-direction:column; align-items:center; margin-bottom:24px; }
-  .avatar-ring {
-    width:100px; height:100px; border-radius:50%;
-    border:3px dashed var(--pink-light); cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    background:var(--pink-pale); position:relative; overflow:hidden;
-    transition:var(--transition);
-  }
+  .avatar-ring { width:100px; height:100px; border-radius:50%; border:3px dashed var(--pink-light); cursor:pointer; display:flex; align-items:center; justify-content:center; background:var(--pink-pale); position:relative; overflow:hidden; transition:var(--transition); }
   .avatar-ring:hover { border-color:var(--pink); }
   .avatar-ring img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
   .avatar-ring .avatar-placeholder { font-size:2.5rem; color:var(--pink-light); }
   .avatar-ring input { position:absolute; inset:0; opacity:0; cursor:pointer; }
   .avatar-upload span { margin-top:10px; font-size:0.82rem; font-weight:700; color:var(--pink); }
 
-  /* ── HOME SCREEN ── */
+  /* HOME */
   #screen-home { background:var(--bg); }
-  .home-header {
-    background:var(--card);
-    padding:16px 20px 14px;
-    box-shadow:var(--shadow-sm);
-    display:flex; align-items:center; gap:12px;
-    border-bottom:1px solid var(--border);
-    flex-shrink:0;
-  }
+  .home-header { background:var(--card); padding:16px 20px 14px; box-shadow:var(--shadow-sm); display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); flex-shrink:0; }
   .header-logo { font-family:'Pacifico',cursive; font-size:1.4rem; background:linear-gradient(135deg,var(--pink),var(--pink-deep)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; flex:1; }
-  .header-avatar { width:40px; height:40px; border-radius:50%; background:var(--pink-pale); border:2px solid var(--pink-light); object-fit:cover; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.1rem; overflow:hidden; }
+  .header-avatar { width:40px; height:40px; border-radius:50%; background:var(--pink-pale); border:2px solid var(--pink-light); object-fit:cover; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; overflow:hidden; color:var(--pink); }
   .header-avatar img { width:100%; height:100%; object-fit:cover; }
-  .icon-btn { width:40px; height:40px; border-radius:50%; border:none; background:var(--pink-pale); color:var(--pink); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.1rem; transition:var(--transition); flex-shrink:0; }
+  .icon-btn { width:40px; height:40px; border-radius:50%; border:none; background:var(--pink-pale); color:var(--pink); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:var(--transition); flex-shrink:0; }
   .icon-btn:active { background:var(--pink-glass); transform:scale(0.92); }
-  /* Search bar */
   .search-bar { padding:12px 16px; flex-shrink:0; }
   .search-inner { background:var(--card); border:1.5px solid var(--border); border-radius:50px; padding:10px 16px; display:flex; align-items:center; gap:10px; box-shadow:var(--shadow-sm); }
   .search-inner input { flex:1; border:none; background:transparent; font-family:'Nunito',sans-serif; font-size:0.95rem; color:var(--text); outline:none; font-weight:600; }
-  .search-inner span { color:var(--text-muted); font-size:1rem; }
-  /* Chat list */
+  .search-inner .material-icons-round { color:var(--text-muted); }
   .chat-list { flex:1; overflow-y:auto; padding:0 0 100px; }
   .chat-list::-webkit-scrollbar { display:none; }
   .empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; height:60vh; gap:16px; padding:24px; }
-  .empty-icon { font-size:4rem; animation:float 3s ease-in-out infinite; }
-  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .empty-icon { font-size:4rem; color:var(--pink-light); animation:float 3s ease-in-out infinite; }
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
   .empty-state h3 { font-size:1.3rem; font-weight:800; color:var(--text); }
   .empty-state p { color:var(--text-muted); font-size:0.9rem; text-align:center; font-weight:600; }
-  /* Chat item */
-  .chat-item {
-    display:flex; align-items:center; gap:14px; padding:14px 16px;
-    cursor:pointer; transition:var(--transition); border-bottom:1px solid var(--border);
-    background:var(--card); position:relative;
-  }
+  .chat-item { display:flex; align-items:center; gap:14px; padding:14px 16px; cursor:pointer; transition:var(--transition); border-bottom:1px solid var(--border); background:var(--card); position:relative; }
   .chat-item:active { background:var(--pink-pale); }
-  .chat-item.satellite-locked::after { content:'🛰️'; position:absolute; right:60px; top:50%; transform:translateY(-50%); font-size:0.9rem; }
-  .chat-avatar { width:52px; height:52px; border-radius:50%; background:var(--pink-pale); border:2px solid var(--border); flex-shrink:0; position:relative; display:flex; align-items:center; justify-content:center; font-size:1.4rem; overflow:hidden; }
+  .chat-avatar { width:52px; height:52px; border-radius:50%; background:var(--pink-pale); border:2px solid var(--border); flex-shrink:0; position:relative; display:flex; align-items:center; justify-content:center; color:var(--pink); font-weight:800; font-size:1.2rem; overflow:hidden; }
   .chat-avatar img { width:100%; height:100%; object-fit:cover; }
   .online-dot { position:absolute; bottom:2px; right:2px; width:12px; height:12px; border-radius:50%; background:var(--online); border:2px solid var(--card); }
   .chat-info { flex:1; min-width:0; }
@@ -183,134 +128,48 @@
   .chat-preview { display:flex; align-items:center; gap:4px; }
   .chat-preview-text { font-size:0.82rem; color:var(--text-muted); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px; }
   .unread-badge { background:linear-gradient(135deg,var(--pink),var(--pink-deep)); color:#fff; border-radius:50px; min-width:20px; height:20px; font-size:0.72rem; font-weight:800; display:flex; align-items:center; justify-content:center; padding:0 6px; flex-shrink:0; }
-  /* FAB */
-  .fab {
-    position:fixed; bottom:90px; right:20px; width:58px; height:58px;
-    border-radius:50%; border:none;
-    background:linear-gradient(135deg,var(--pink),var(--pink-deep));
-    color:#fff; font-size:1.6rem; cursor:pointer;
-    box-shadow:0 6px 24px rgba(233,30,140,0.45);
-    display:flex; align-items:center; justify-content:center;
-    transition:var(--transition); z-index:100;
-  }
+  .fab { position:fixed; bottom:90px; right:20px; width:58px; height:58px; border-radius:50%; border:none; background:linear-gradient(135deg,var(--pink),var(--pink-deep)); color:#fff; cursor:pointer; box-shadow:0 6px 24px rgba(233,30,140,0.45); display:flex; align-items:center; justify-content:center; transition:var(--transition); z-index:100; }
   .fab:active { transform:scale(0.9); }
-  /* Bottom nav */
-  .bottom-nav {
-    position:fixed; bottom:0; left:0; right:0;
-    background:var(--card); border-top:1px solid var(--border);
-    display:flex; padding:8px 0 calc(8px + env(safe-area-inset-bottom));
-    box-shadow:0 -4px 20px rgba(255,107,157,0.1); z-index:99;
-  }
+  .fab .material-icons-round { font-size:1.8rem; }
+  .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:var(--card); border-top:1px solid var(--border); display:flex; padding:8px 0 calc(8px + env(safe-area-inset-bottom)); box-shadow:0 -4px 20px rgba(255,107,157,0.1); z-index:99; }
   .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:4px; border:none; background:transparent; color:var(--text-muted); font-family:'Nunito',sans-serif; transition:var(--transition); }
   .nav-item.active { color:var(--pink); }
-  .nav-item span:first-child { font-size:1.2rem; }
-  .nav-item span:last-child { font-size:0.62rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; }
+  .nav-item .material-icons-round { font-size:1.4rem; }
+  .nav-item span.nav-label { font-size:0.62rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; }
 
-  /* ── CHAT SCREEN ── */
+  /* CHAT SCREEN */
   #screen-chat { background:var(--bg); }
-  .chat-header {
-    background:var(--card); padding:12px 16px;
-    display:flex; align-items:center; gap:12px;
-    box-shadow:var(--shadow-sm); border-bottom:1px solid var(--border); flex-shrink:0;
-  }
-  .back-btn { width:36px; height:36px; border-radius:50%; border:none; background:transparent; color:var(--pink); font-size:1.3rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .chat-header { background:var(--card); padding:12px 16px; display:flex; align-items:center; gap:12px; box-shadow:var(--shadow-sm); border-bottom:1px solid var(--border); flex-shrink:0; }
+  .back-btn { width:36px; height:36px; border-radius:50%; border:none; background:transparent; color:var(--pink); cursor:pointer; display:flex; align-items:center; justify-content:center; }
   .chat-header-info { flex:1; min-width:0; }
   .chat-header-name { font-weight:800; font-size:1rem; color:var(--text); }
   .chat-header-status { font-size:0.75rem; color:var(--text-muted); font-weight:600; }
   .chat-header-status.online { color:var(--online); }
-  /* Messages */
   .messages-area { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:8px; }
   .messages-area::-webkit-scrollbar { display:none; }
   .msg-row { display:flex; align-items:flex-end; gap:8px; }
   .msg-row.sent { flex-direction:row-reverse; }
-  .msg-bubble {
-    max-width:72%; padding:10px 14px; border-radius:18px;
-    font-size:0.92rem; font-weight:600; line-height:1.5;
-    position:relative; word-break:break-word;
-  }
-  .msg-row.recv .msg-bubble {
-    background:var(--msg-recv); color:var(--text);
-    border-bottom-left-radius:4px;
-    box-shadow:var(--shadow-sm); border:1px solid var(--border);
-  }
-  .msg-row.sent .msg-bubble {
-    background:var(--msg-sent); color:#fff;
-    border-bottom-right-radius:4px;
-    box-shadow:0 4px 16px rgba(233,30,140,0.35);
-  }
+  .msg-bubble { max-width:72%; padding:10px 14px; border-radius:18px; font-size:0.92rem; font-weight:600; line-height:1.5; position:relative; word-break:break-word; }
+  .msg-row.recv .msg-bubble { background:var(--msg-recv); color:var(--text); border-bottom-left-radius:4px; box-shadow:var(--shadow-sm); border:1px solid var(--border); }
+  .msg-row.sent .msg-bubble { background:var(--msg-sent); color:#fff; border-bottom-right-radius:4px; box-shadow:0 4px 16px rgba(233,30,140,0.35); }
   .msg-meta { font-size:0.68rem; margin-top:4px; display:flex; align-items:center; gap:3px; }
   .msg-row.sent .msg-meta { justify-content:flex-end; color:rgba(255,255,255,0.75); }
   .msg-row.recv .msg-meta { color:var(--text-light); }
-  .tick { font-size:0.8rem; }
-  .tick.seen { color:#82C8FF; }
-  /* Date divider */
+  .tick .material-icons-round { font-size:0.85rem; }
+  .tick.seen .material-icons-round { color:#82C8FF; }
   .date-divider { text-align:center; margin:8px 0; }
   .date-divider span { background:var(--border); color:var(--text-muted); font-size:0.72rem; font-weight:700; padding:4px 12px; border-radius:50px; }
-  /* Typing indicator */
-  .typing-indicator { display:flex; align-items:center; gap:4px; padding:10px 14px; background:var(--card); border-radius:18px; border-bottom-left-radius:4px; box-shadow:var(--shadow-sm); width:fit-content; }
-  .typing-indicator span { width:7px; height:7px; border-radius:50%; background:var(--text-muted); animation:typing 1s infinite; }
-  .typing-indicator span:nth-child(2){animation-delay:0.2s;}
-  .typing-indicator span:nth-child(3){animation-delay:0.4s;}
-  @keyframes typing { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-6px);opacity:1} }
-  /* Input bar */
-  .chat-input-bar {
-    background:var(--card); border-top:1px solid var(--border);
-    padding:10px 12px calc(10px + env(safe-area-inset-bottom));
-    display:flex; align-items:center; gap:10px; flex-shrink:0;
-  }
-  .chat-input {
-    flex:1; background:var(--pink-pale); border:1.5px solid var(--border);
-    border-radius:50px; padding:11px 18px;
-    font-family:'Nunito',sans-serif; font-size:0.95rem; color:var(--text);
-    font-weight:600; outline:none; transition:var(--transition);
-  }
+  .chat-input-bar { background:var(--card); border-top:1px solid var(--border); padding:10px 12px calc(10px + env(safe-area-inset-bottom)); display:flex; align-items:center; gap:10px; flex-shrink:0; }
+  .chat-input { flex:1; background:var(--pink-pale); border:1.5px solid var(--border); border-radius:50px; padding:11px 18px; font-family:'Nunito',sans-serif; font-size:0.95rem; color:var(--text); font-weight:600; outline:none; transition:var(--transition); }
   .chat-input:focus { border-color:var(--pink); background:var(--white); }
-  .send-btn {
-    width:44px; height:44px; border-radius:50%; border:none;
-    background:linear-gradient(135deg,var(--pink),var(--pink-deep));
-    color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;
-    font-size:1.1rem; box-shadow:0 4px 14px rgba(233,30,140,0.4);
-    transition:var(--transition); flex-shrink:0;
-  }
+  .send-btn { width:44px; height:44px; border-radius:50%; border:none; background:linear-gradient(135deg,var(--pink),var(--pink-deep)); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(233,30,140,0.4); transition:var(--transition); flex-shrink:0; }
   .send-btn:active { transform:scale(0.9); }
 
-  /* ── MODALS ── */
-  .modal-overlay {
-    position:fixed; inset:0; background:rgba(0,0,0,0.5);
-    backdrop-filter:blur(4px); z-index:1000; display:none;
-    align-items:flex-end; justify-content:center;
-  }
-  .modal-overlay.open { display:flex; animation:fadeIn 0.2s; }
-  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-  .modal-sheet {
-    background:var(--card); border-radius:28px 28px 0 0;
-    padding:28px 24px 36px; width:100%; max-width:480px;
-    animation:sheetUp 0.35s cubic-bezier(0.4,0,0.2,1);
-    max-height:80vh; overflow-y:auto;
-  }
-  @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
-  .modal-center-wrap { position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; }
-  .modal-center-wrap.open { display:flex; animation:fadeIn 0.2s; }
-  .modal-center { background:var(--card); border-radius:24px; padding:28px 24px; width:100%; max-width:380px; animation:popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
-  @keyframes popIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
-  .modal-title { font-size:1.3rem; font-weight:800; color:var(--text); margin-bottom:6px; }
-  .modal-subtitle { color:var(--text-muted); font-size:0.85rem; font-weight:600; margin-bottom:20px; }
-  .modal-handle { width:40px; height:4px; border-radius:2px; background:var(--border); margin:0 auto 20px; }
-  /* Contact result */
-  .contact-result { display:flex; align-items:center; gap:14px; background:var(--pink-pale); border-radius:var(--radius-sm); padding:14px; margin:16px 0; border:1.5px solid var(--border); }
-  .contact-result-avatar { width:52px; height:52px; border-radius:50%; background:var(--pink-light); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; overflow:hidden; }
-  .contact-result-avatar img { width:100%; height:100%; object-fit:cover; }
-  .contact-result-info h4 { font-weight:800; color:var(--text); font-size:0.98rem; }
-  .contact-result-info p { color:var(--text-muted); font-size:0.8rem; font-weight:600; }
-  /* PIN input */
-  .pin-inputs { display:flex; gap:12px; justify-content:center; margin:20px 0; }
-  .pin-inputs input { width:52px; height:56px; border-radius:12px; border:2px solid var(--border); background:var(--pink-pale); text-align:center; font-size:1.4rem; font-weight:800; color:var(--text); font-family:'Nunito',sans-serif; outline:none; transition:var(--transition); }
-  .pin-inputs input:focus { border-color:var(--pink); background:var(--white); }
-  /* Settings */
+  /* SETTINGS */
   #screen-settings { background:var(--bg); overflow-y:auto; }
   .settings-header { background:linear-gradient(135deg,var(--pink),var(--pink-deep)); padding:50px 20px 30px; }
   .settings-profile { display:flex; flex-direction:column; align-items:center; gap:12px; }
-  .settings-avatar { width:80px; height:80px; border-radius:50%; border:3px solid rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center; font-size:2rem; overflow:hidden; background:rgba(255,255,255,0.2); cursor:pointer; }
+  .settings-avatar { width:80px; height:80px; border-radius:50%; border:3px solid rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center; overflow:hidden; background:rgba(255,255,255,0.2); cursor:pointer; color:#fff; }
   .settings-avatar img { width:100%; height:100%; object-fit:cover; }
   .settings-name { color:#fff; font-size:1.2rem; font-weight:800; }
   .settings-phone { color:rgba(255,255,255,0.8); font-size:0.85rem; font-weight:600; }
@@ -320,181 +179,284 @@
   .settings-item { display:flex; align-items:center; gap:14px; padding:15px 16px; cursor:pointer; transition:var(--transition); border-bottom:1px solid var(--border); }
   .settings-item:last-child { border-bottom:none; }
   .settings-item:active { background:var(--pink-pale); }
-  .settings-item-icon { width:36px; height:36px; border-radius:10px; background:var(--pink-pale); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+  .settings-item-icon { width:36px; height:36px; border-radius:10px; background:var(--pink-pale); display:flex; align-items:center; justify-content:center; color:var(--pink); flex-shrink:0; }
   .settings-item-text { flex:1; }
   .settings-item-text h4 { font-size:0.95rem; font-weight:700; color:var(--text); }
   .settings-item-text p { font-size:0.78rem; color:var(--text-muted); font-weight:600; }
-  .settings-item-arrow { color:var(--text-light); font-size:0.9rem; }
-  /* Toggle switch */
+  .settings-item-arrow { color:var(--text-light); }
   .toggle { position:relative; width:48px; height:26px; }
   .toggle input { opacity:0; width:0; height:0; }
   .toggle-slider { position:absolute; inset:0; background:var(--border); border-radius:50px; cursor:pointer; transition:var(--transition); }
   .toggle-slider::before { content:''; position:absolute; width:20px; height:20px; left:3px; top:3px; background:#fff; border-radius:50%; transition:var(--transition); }
   .toggle input:checked + .toggle-slider { background:var(--pink); }
   .toggle input:checked + .toggle-slider::before { transform:translateX(22px); }
-  /* Toast */
-  #toast {
-    position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px);
-    background:var(--text); color:var(--white); padding:12px 24px; border-radius:50px;
-    font-size:0.88rem; font-weight:700; z-index:9999; transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
-    white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,0.3);
-  }
-  #toast.show { transform:translateX(-50%) translateY(0); }
-  /* In-app notification */
-  #in-app-notif {
-    position:fixed; top:16px; left:16px; right:16px; z-index:9998;
-    background:var(--card); border-radius:16px; padding:14px 16px;
-    box-shadow:0 8px 32px rgba(0,0,0,0.2); display:flex; align-items:center; gap:12px;
-    transform:translateY(-100px); opacity:0; transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
-    border-left:4px solid var(--pink);
-  }
-  #in-app-notif.show { transform:translateY(0); opacity:1; }
-  #in-app-notif .notif-avatar { width:36px; height:36px; border-radius:50%; background:var(--pink-pale); display:flex; align-items:center; justify-content:center; font-size:1rem; }
-  #in-app-notif .notif-content h5 { font-size:0.85rem; font-weight:800; color:var(--text); }
-  #in-app-notif .notif-content p { font-size:0.78rem; color:var(--text-muted); font-weight:600; }
-  /* Satellite mode badge */
-  .satellite-badge { background:linear-gradient(135deg,#6C63FF,#FF6B9D); color:#fff; font-size:0.7rem; font-weight:800; padding:2px 8px; border-radius:50px; }
-  /* Edit modal inputs */
+
+  /* MODALS */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); z-index:1000; display:none; align-items:flex-end; justify-content:center; }
+  .modal-overlay.open { display:flex; animation:fadeIn 0.2s; }
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .modal-sheet { background:var(--card); border-radius:28px 28px 0 0; padding:28px 24px 36px; width:100%; max-width:480px; animation:sheetUp 0.35s cubic-bezier(0.4,0,0.2,1); max-height:85vh; overflow-y:auto; }
+  @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .modal-center-wrap { position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; }
+  .modal-center-wrap.open { display:flex; animation:fadeIn 0.2s; }
+  .modal-center { background:var(--card); border-radius:24px; padding:28px 24px; width:100%; max-width:380px; animation:popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
+  @keyframes popIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
+  .modal-title { font-size:1.3rem; font-weight:800; color:var(--text); margin-bottom:6px; }
+  .modal-subtitle { color:var(--text-muted); font-size:0.85rem; font-weight:600; margin-bottom:20px; }
+  .modal-handle { width:40px; height:4px; border-radius:2px; background:var(--border); margin:0 auto 20px; }
+  .contact-result { display:flex; align-items:center; gap:14px; background:var(--pink-pale); border-radius:var(--radius-sm); padding:14px; margin:16px 0; border:1.5px solid var(--border); }
+  .contact-result-avatar { width:52px; height:52px; border-radius:50%; background:var(--pink-light); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:1.2rem; flex-shrink:0; overflow:hidden; }
+  .contact-result-avatar img { width:100%; height:100%; object-fit:cover; }
+  .contact-result-info h4 { font-weight:800; color:var(--text); font-size:0.98rem; }
+  .contact-result-info p { color:var(--text-muted); font-size:0.8rem; font-weight:600; }
+  .pin-inputs { display:flex; gap:12px; justify-content:center; margin:20px 0; }
+  .pin-inputs input { width:52px; height:56px; border-radius:12px; border:2px solid var(--border); background:var(--pink-pale); text-align:center; font-size:1.4rem; font-weight:800; color:var(--text); font-family:'Nunito',sans-serif; outline:none; transition:var(--transition); }
+  .pin-inputs input:focus { border-color:var(--pink); background:var(--white); }
   .edit-field { margin-bottom:16px; }
   .edit-field label { font-size:0.78rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px; }
   .edit-field input { width:100%; padding:13px 16px; border:2px solid var(--border); border-radius:var(--radius-sm); background:var(--pink-pale); color:var(--text); font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:600; outline:none; transition:var(--transition); }
   .edit-field input:focus { border-color:var(--pink); background:var(--white); }
-  /* Msg context menu */
   .ctx-menu { position:fixed; background:var(--card); border-radius:14px; box-shadow:0 8px 32px rgba(0,0,0,0.2); overflow:hidden; z-index:2000; min-width:160px; }
-  .ctx-item { padding:12px 18px; font-size:0.88rem; font-weight:700; color:var(--text); cursor:pointer; transition:var(--transition); }
+  .ctx-item { padding:12px 18px; font-size:0.88rem; font-weight:700; color:var(--text); cursor:pointer; transition:var(--transition); display:flex; align-items:center; gap:8px; }
   .ctx-item:hover { background:var(--pink-pale); }
   .ctx-item.danger { color:#E53935; }
-  @media(min-width:480px){
-    .auth-card,.modal-sheet{max-width:480px;margin:0 auto;}
-  }
+
+  /* TOAST */
+  #toast { position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px); background:var(--text); color:var(--white); padding:12px 24px; border-radius:50px; font-size:0.88rem; font-weight:700; z-index:9999; transition:all 0.4s cubic-bezier(0.4,0,0.2,1); white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+  #toast.show { transform:translateX(-50%) translateY(0); }
+  #in-app-notif { position:fixed; top:16px; left:16px; right:16px; z-index:9998; background:var(--card); border-radius:16px; padding:14px 16px; box-shadow:0 8px 32px rgba(0,0,0,0.2); display:flex; align-items:center; gap:12px; transform:translateY(-100px); opacity:0; transition:all 0.4s cubic-bezier(0.4,0,0.2,1); border-left:4px solid var(--pink); }
+  #in-app-notif.show { transform:translateY(0); opacity:1; }
+  #in-app-notif .notif-avatar { width:36px; height:36px; border-radius:50%; background:var(--pink-pale); display:flex; align-items:center; justify-content:center; color:var(--pink); overflow:hidden; flex-shrink:0; }
+  #in-app-notif .notif-avatar img { width:100%; height:100%; object-fit:cover; }
+  #in-app-notif .notif-content h5 { font-size:0.85rem; font-weight:800; color:var(--text); }
+  #in-app-notif .notif-content p { font-size:0.78rem; color:var(--text-muted); font-weight:600; }
+
+  /* IMAGE CROPPER */
+  #cropper-modal { position:fixed; inset:0; z-index:10000; background:rgba(0,0,0,0.92); display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
+  #cropper-modal.open { display:flex; }
+  .cropper-title { color:#fff; font-size:1.1rem; font-weight:800; margin-bottom:16px; }
+  .cropper-container { position:relative; width:100%; max-width:360px; height:360px; overflow:hidden; border-radius:50%; border:3px solid var(--pink); background:#000; touch-action:none; }
+  .cropper-container.square { border-radius:16px; }
+  #cropper-img { position:absolute; transform-origin:center center; cursor:grab; user-select:none; -webkit-user-drag:none; }
+  #cropper-img:active { cursor:grabbing; }
+  .cropper-controls { display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:20px; width:100%; max-width:360px; }
+  .zoom-slider { width:100%; accent-color:var(--pink); }
+  .cropper-label { color:rgba(255,255,255,0.7); font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; align-self:flex-start; }
+  .cropper-btns { display:flex; gap:12px; width:100%; }
+  .cropper-btns button { flex:1; padding:13px; border-radius:12px; border:none; font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; }
+  .cropper-cancel { background:rgba(255,255,255,0.1); color:#fff; }
+  .cropper-save { background:linear-gradient(135deg,var(--pink),var(--pink-deep)); color:#fff; }
+
+  /* CHAT SETTINGS SCREEN */
+  #screen-chat-settings { background:var(--bg); overflow-y:auto; }
+  .chat-settings-header { background:var(--card); padding:16px 20px; display:flex; align-items:center; gap:14px; border-bottom:1px solid var(--border); box-shadow:var(--shadow-sm); flex-shrink:0; }
+  .chat-settings-header h2 { font-size:1.1rem; font-weight:800; color:var(--text); flex:1; }
+
+  @media(min-width:480px){.auth-card,.modal-sheet{max-width:480px;margin:0 auto;}}
 </style>
 </head>
 <body>
 
-<!-- LOADING SCREEN -->
+<!-- LOADING -->
 <div id="loading-screen">
   <div class="logo-splash">ID CHAT</div>
   <div class="logo-tagline">Connect · Private · Real-time</div>
   <div class="loader-dots"><span></span><span></span><span></span></div>
 </div>
 
-<!-- TOAST -->
 <div id="toast"></div>
-
-<!-- IN-APP NOTIFICATION -->
 <div id="in-app-notif">
-  <div class="notif-avatar" id="notif-avatar">👤</div>
-  <div class="notif-content">
-    <h5 id="notif-title">ID CHAT</h5>
-    <p id="notif-body">New message</p>
+  <div class="notif-avatar" id="notif-avatar"><span class="material-icons-round">person</span></div>
+  <div class="notif-content"><h5 id="notif-title">ID CHAT</h5><p id="notif-body">New message</p></div>
+</div>
+
+<!-- IMAGE CROPPER MODAL -->
+<div id="cropper-modal">
+  <div class="cropper-title">Adjust Profile Photo</div>
+  <div class="cropper-container" id="cropper-container">
+    <img id="cropper-img" src="" draggable="false">
+  </div>
+  <div class="cropper-controls">
+    <div class="cropper-label">Zoom</div>
+    <input type="range" class="zoom-slider" id="zoom-slider" min="1" max="4" step="0.01" value="1">
+    <div class="cropper-btns">
+      <button class="cropper-cancel" onclick="closeCropper()">Cancel</button>
+      <button class="cropper-save" onclick="saveCrop()">Save Photo</button>
+    </div>
   </div>
 </div>
 
-<!-- ══ SCREEN: REGISTER ══ -->
+<!-- SCREEN: REGISTER -->
 <div id="screen-register" class="screen">
   <div class="auth-top">
     <div class="auth-logo">ID CHAT</div>
     <div class="auth-subtitle">Real-time · Private · Secure</div>
   </div>
-  <div class="auth-card" style="background:var(--card)">
+  <div class="auth-card">
     <h2>Create Account</h2>
     <p>Your mobile number is your identity</p>
-    <div class="field">
-      <label>Full Name</label>
-      <input type="text" id="reg-name" placeholder="Enter your full name" autocomplete="name">
-    </div>
-    <div class="field">
-      <label>Mobile Number</label>
-      <input type="tel" id="reg-phone" placeholder="+91 98765 43210" autocomplete="tel">
-    </div>
-    <div class="field">
-      <label>Email Address</label>
-      <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email">
-    </div>
-    <button class="btn-primary" onclick="handleRegister()">Next →</button>
+    <div class="field"><label>Full Name</label><input type="text" id="reg-name" placeholder="Enter your full name" autocomplete="name"></div>
+    <div class="field"><label>Mobile Number</label><input type="tel" id="reg-phone" placeholder="+91 98765 43210" autocomplete="tel"></div>
+    <div class="field"><label>Email Address</label><input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email"></div>
+    <button class="btn-primary" onclick="handleRegister()"><span class="material-icons-round">arrow_forward</span> Next</button>
   </div>
 </div>
 
-<!-- ══ SCREEN: PROFILE SETUP ══ -->
+<!-- SCREEN: PROFILE SETUP -->
 <div id="screen-profile" class="screen">
   <div class="auth-top">
     <div class="auth-logo">ID CHAT</div>
     <div class="auth-subtitle">Set up your profile</div>
   </div>
-  <div class="auth-card" style="background:var(--card)">
+  <div class="auth-card">
     <h2>Profile Setup</h2>
     <p>Let others know who you are</p>
     <div class="avatar-upload">
       <div class="avatar-ring" id="profile-avatar-ring">
-        <span class="avatar-placeholder">📷</span>
-        <input type="file" accept="image/*" id="profile-pic-input" onchange="handleProfilePicPreview(this)">
+        <span class="material-icons-round avatar-placeholder" style="font-size:2.5rem;color:var(--pink-light);">photo_camera</span>
+        <input type="file" accept="image/*" id="profile-pic-input" onchange="handleProfilePicSelect(this,'profile')">
       </div>
       <span>Tap to upload photo</span>
     </div>
-    <div class="field">
-      <label>Bio / About</label>
-      <textarea id="reg-bio" placeholder="Say something about yourself..."></textarea>
-    </div>
-    <button class="btn-primary" onclick="handleProfileSave()">🚀 Complete Setup</button>
+    <div class="field"><label>Bio / About</label><textarea id="reg-bio" placeholder="Say something about yourself..."></textarea></div>
+    <button class="btn-primary" onclick="handleProfileSave()"><span class="material-icons-round">rocket_launch</span> Complete Setup</button>
     <button class="btn-secondary" onclick="handleProfileSkip()">Skip for now</button>
   </div>
 </div>
 
-<!-- ══ SCREEN: HOME ══ -->
+<!-- SCREEN: HOME -->
 <div id="screen-home" class="screen">
   <div class="home-header">
     <div class="header-logo">ID CHAT</div>
-    <div class="header-avatar" id="home-avatar" onclick="showScreen('screen-settings')">👤</div>
-    <button class="icon-btn" onclick="showScreen('screen-settings')">⚙️</button>
+    <div class="header-avatar" id="home-avatar" onclick="showScreen('screen-settings')"><span class="material-icons-round">person</span></div>
+    <button class="icon-btn" onclick="showScreen('screen-settings')"><span class="material-icons-round">settings</span></button>
   </div>
   <div class="search-bar">
     <div class="search-inner">
-      <span>🔍</span>
+      <span class="material-icons-round">search</span>
       <input type="text" placeholder="Search chats..." id="chat-search" oninput="filterChats(this.value)">
     </div>
   </div>
   <div class="chat-list" id="chat-list">
     <div class="empty-state" id="empty-state">
-      <div class="empty-icon">💬</div>
+      <span class="material-icons-round empty-icon" style="font-size:4rem;">chat_bubble_outline</span>
       <h3>No chats yet</h3>
       <p>Tap + to add contacts and start chatting</p>
     </div>
   </div>
-  <button class="fab" onclick="openAddContact()">＋</button>
+  <button class="fab" onclick="openAddContact()"><span class="material-icons-round">add</span></button>
   <nav class="bottom-nav">
-    <button class="nav-item active" onclick="showTab('chats',this)"><span>💬</span><span>Chats</span></button>
-    <button class="nav-item" onclick="showTab('status',this)"><span>🌕</span><span>Status</span></button>
-    <button class="nav-item" onclick="showScreen('screen-settings')"><span>⚙️</span><span>Settings</span></button>
+    <button class="nav-item active" onclick="showTab('chats',this)"><span class="material-icons-round">chat</span><span class="nav-label">Chats</span></button>
+    <button class="nav-item" onclick="showScreen('screen-chat-settings')"><span class="material-icons-round">tune</span><span class="nav-label">Chat Settings</span></button>
+    <button class="nav-item" onclick="showScreen('screen-settings')"><span class="material-icons-round">settings</span><span class="nav-label">Settings</span></button>
   </nav>
 </div>
 
-<!-- ══ SCREEN: CHAT ══ -->
+<!-- SCREEN: CHAT -->
 <div id="screen-chat" class="screen">
   <div class="chat-header">
-    <button class="back-btn" onclick="backToHome()">←</button>
-    <div class="chat-avatar" id="chat-header-avatar" style="width:40px;height:40px;font-size:1.1rem;">👤</div>
+    <button class="back-btn" onclick="backToHome()"><span class="material-icons-round">arrow_back</span></button>
+    <div class="chat-avatar" id="chat-header-avatar" style="width:40px;height:40px;"><span class="material-icons-round">person</span></div>
     <div class="chat-header-info">
       <div class="chat-header-name" id="chat-header-name">Contact</div>
       <div class="chat-header-status" id="chat-header-status">offline</div>
     </div>
-    <button class="icon-btn" onclick="openChatOptions()">⋮</button>
+    <button class="icon-btn" onclick="openChatOptions()"><span class="material-icons-round">more_vert</span></button>
   </div>
   <div class="messages-area" id="messages-area"></div>
   <div class="chat-input-bar">
     <input type="text" class="chat-input" id="chat-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendMessage()" oninput="handleTyping()">
-    <button class="send-btn" onclick="sendMessage()">➤</button>
+    <button class="send-btn" onclick="sendMessage()"><span class="material-icons-round">send</span></button>
   </div>
 </div>
 
-<!-- ══ SCREEN: SETTINGS ══ -->
+<!-- SCREEN: CHAT SETTINGS -->
+<div id="screen-chat-settings" class="screen">
+  <div class="chat-settings-header" style="background:var(--card);padding:16px 20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border);box-shadow:var(--shadow-sm);">
+    <button class="back-btn" onclick="showScreen('screen-home')"><span class="material-icons-round">arrow_back</span></button>
+    <h2 style="font-size:1.1rem;font-weight:800;color:var(--text);flex:1;">Chat Settings</h2>
+  </div>
+  <div style="padding:0 0 100px;overflow-y:auto;flex:1;">
+    <div class="settings-section">
+      <div class="settings-section-title">Notifications</div>
+      <div class="settings-card">
+        <div class="settings-item">
+          <div class="settings-item-icon"><span class="material-icons-round">notifications</span></div>
+          <div class="settings-item-text"><h4>Message Notifications</h4><p>Get alerts for new messages</p></div>
+          <label class="toggle"><input type="checkbox" id="notif-toggle2" checked onchange="document.getElementById('notif-toggle').checked=this.checked"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-icon"><span class="material-icons-round">volume_up</span></div>
+          <div class="settings-item-text"><h4>Sound</h4><p>Play sound on new message</p></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-section-title">Privacy</div>
+      <div class="settings-card">
+        <div class="settings-item">
+          <div class="settings-item-icon"><span class="material-icons-round">visibility</span></div>
+          <div class="settings-item-text"><h4>Read Receipts</h4><p>Show when messages are read</p></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-icon"><span class="material-icons-round">keyboard</span></div>
+          <div class="settings-item-text"><h4>Typing Indicator</h4><p>Show when you are typing</p></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-section-title">Security</div>
+      <div class="settings-card">
+        <div class="settings-item" onclick="openSatelliteSettings()">
+          <div class="settings-item-icon"><span class="material-icons-round">satellite_alt</span></div>
+          <div class="settings-item-text"><h4>Satellite Mode PIN</h4><p>Set or change your chat lock PIN</p></div>
+          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-section-title">Appearance</div>
+      <div class="settings-card">
+        <div class="settings-item">
+          <div class="settings-item-icon"><span class="material-icons-round">dark_mode</span></div>
+          <div class="settings-item-text"><h4>Dark Mode</h4><p>Switch between light and dark</p></div>
+          <label class="toggle"><input type="checkbox" id="dark-mode-toggle2" onchange="syncDarkMode(this.checked)"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-icon"><span class="material-icons-round">format_size</span></div>
+          <div class="settings-item-text"><h4>Font Size</h4><p>Normal</p></div>
+          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-section-title">Data</div>
+      <div class="settings-card">
+        <div class="settings-item" onclick="clearAllChats()">
+          <div class="settings-item-icon" style="background:#FFEBEE;"><span class="material-icons-round" style="color:#E53935;">delete_sweep</span></div>
+          <div class="settings-item-text"><h4 style="color:#E53935;">Clear All Chat History</h4><p>Delete all messages</p></div>
+          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: SETTINGS -->
 <div id="screen-settings" class="screen">
   <div class="settings-header">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
-      <button style="background:rgba(255,255,255,0.2);border:none;width:36px;height:36px;border-radius:50%;color:#fff;font-size:1.2rem;cursor:pointer;" onclick="showScreen('screen-home')">←</button>
+      <button style="background:rgba(255,255,255,0.2);border:none;width:36px;height:36px;border-radius:50%;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;" onclick="showScreen('screen-home')"><span class="material-icons-round">arrow_back</span></button>
       <span style="color:#fff;font-size:1.1rem;font-weight:800;">Settings</span>
     </div>
     <div class="settings-profile">
-      <div class="settings-avatar" id="settings-avatar" onclick="document.getElementById('settings-pic-input').click()">👤<input type="file" accept="image/*" id="settings-pic-input" style="display:none" onchange="changeProfilePic(this)"></div>
+      <div class="settings-avatar" id="settings-avatar" onclick="document.getElementById('settings-pic-input').click()">
+        <span class="material-icons-round" style="font-size:2.5rem;">person</span>
+        <input type="file" accept="image/*" id="settings-pic-input" style="display:none" onchange="handleProfilePicSelect(this,'settings')">
+      </div>
       <div class="settings-name" id="settings-name-display">User</div>
       <div class="settings-phone" id="settings-phone-display">+91 XXXXX XXXXX</div>
     </div>
@@ -504,34 +466,34 @@
       <div class="settings-section-title">Profile</div>
       <div class="settings-card">
         <div class="settings-item" onclick="editField('name')">
-          <div class="settings-item-icon">✏️</div>
+          <div class="settings-item-icon"><span class="material-icons-round">edit</span></div>
           <div class="settings-item-text"><h4>Edit Name</h4><p id="s-name-preview">Your name</p></div>
-          <span class="settings-item-arrow">›</span>
+          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
         </div>
         <div class="settings-item" onclick="editField('phone')">
-          <div class="settings-item-icon">📱</div>
+          <div class="settings-item-icon"><span class="material-icons-round">smartphone</span></div>
           <div class="settings-item-text"><h4>Edit Mobile</h4><p id="s-phone-preview">Your number</p></div>
-          <span class="settings-item-arrow">›</span>
+          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
         </div>
         <div class="settings-item" onclick="editField('email')">
-          <div class="settings-item-icon">📧</div>
+          <div class="settings-item-icon"><span class="material-icons-round">email</span></div>
           <div class="settings-item-text"><h4>Edit Email</h4><p id="s-email-preview">Your email</p></div>
-          <span class="settings-item-arrow">›</span>
+          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
         </div>
         <div class="settings-item" onclick="editField('bio')">
-          <div class="settings-item-icon">💬</div>
+          <div class="settings-item-icon"><span class="material-icons-round">chat_bubble</span></div>
           <div class="settings-item-text"><h4>Edit Bio</h4><p id="s-bio-preview">Your bio</p></div>
-          <span class="settings-item-arrow">›</span>
+          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
         </div>
         <div class="settings-item" onclick="document.getElementById('settings-pic-input').click()">
-          <div class="settings-item-icon">🖼️</div>
+          <div class="settings-item-icon"><span class="material-icons-round">photo_camera</span></div>
           <div class="settings-item-text"><h4>Change Profile Picture</h4></div>
-          <span class="settings-item-arrow">›</span>
+          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
         </div>
         <div class="settings-item" onclick="removeProfilePic()">
-          <div class="settings-item-icon">🗑️</div>
+          <div class="settings-item-icon" style="background:#FFEBEE;"><span class="material-icons-round" style="color:#E53935;">delete</span></div>
           <div class="settings-item-text"><h4>Remove Profile Picture</h4></div>
-          <span class="settings-item-arrow">›</span>
+          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
         </div>
       </div>
     </div>
@@ -539,9 +501,9 @@
       <div class="settings-section-title">Security</div>
       <div class="settings-card">
         <div class="settings-item" onclick="openSatelliteSettings()">
-          <div class="settings-item-icon">🛰️</div>
+          <div class="settings-item-icon"><span class="material-icons-round">satellite_alt</span></div>
           <div class="settings-item-text"><h4>Satellite Mode</h4><p>Private chat lock system</p></div>
-          <span class="settings-item-arrow">›</span>
+          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
         </div>
       </div>
     </div>
@@ -549,12 +511,12 @@
       <div class="settings-section-title">Preferences</div>
       <div class="settings-card">
         <div class="settings-item">
-          <div class="settings-item-icon">🌙</div>
+          <div class="settings-item-icon"><span class="material-icons-round">dark_mode</span></div>
           <div class="settings-item-text"><h4>Dark Mode</h4><p>Switch between light and dark</p></div>
           <label class="toggle"><input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this.checked)"><span class="toggle-slider"></span></label>
         </div>
         <div class="settings-item">
-          <div class="settings-item-icon">🔔</div>
+          <div class="settings-item-icon"><span class="material-icons-round">notifications</span></div>
           <div class="settings-item-text"><h4>Notifications</h4><p>Message alerts</p></div>
           <label class="toggle"><input type="checkbox" id="notif-toggle" checked><span class="toggle-slider"></span></label>
         </div>
@@ -563,35 +525,37 @@
     <div class="settings-section">
       <div class="settings-section-title">Account</div>
       <div class="settings-card">
-        <div class="settings-item" onclick="logout()" style="color:#E53935;">
-          <div class="settings-item-icon">🚪</div>
-          <div class="settings-item-text"><h4 style="color:#E53935;">Log Out</h4></div>
-          <span class="settings-item-arrow">›</span>
+        <div class="settings-item" onclick="logout()">
+          <div class="settings-item-icon"><span class="material-icons-round">logout</span></div>
+          <div class="settings-item-text"><h4>Log Out</h4><p>Exit without deleting data</p></div>
+          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
+        </div>
+        <div class="settings-item" onclick="deleteAccount()" style="border-bottom:none;">
+          <div class="settings-item-icon" style="background:#FFEBEE;"><span class="material-icons-round" style="color:#E53935;">delete_forever</span></div>
+          <div class="settings-item-text"><h4 style="color:#E53935;">Delete Account</h4><p style="color:var(--text-muted);">Permanently removes all data</p></div>
+          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ MODAL: ADD CONTACT ══ -->
+<!-- MODAL: ADD CONTACT -->
 <div id="modal-add-contact" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-add-contact')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title">Add Contact</div>
     <div class="modal-subtitle">Search by mobile number</div>
-    <div class="field">
-      <label>Mobile Number</label>
-      <input type="tel" id="search-phone" placeholder="+91 98765 43210">
-    </div>
-    <button class="btn-primary" onclick="searchContact()">🔍 Search Contact</button>
+    <div class="field"><label>Mobile Number</label><input type="tel" id="search-phone" placeholder="+91 98765 43210"></div>
+    <button class="btn-primary" onclick="searchContact()"><span class="material-icons-round">search</span> Search Contact</button>
     <div id="contact-search-result" style="display:none;"></div>
   </div>
 </div>
 
-<!-- ══ MODAL: SATELLITE PIN ══ -->
+<!-- MODAL: SATELLITE PIN VERIFY -->
 <div id="modal-satellite-pin" class="modal-center-wrap" onclick="if(event.target===this)closeModal('modal-satellite-pin')">
   <div class="modal-center">
-    <div style="text-align:center;font-size:2.5rem;margin-bottom:8px;">🛰️</div>
+    <div style="text-align:center;margin-bottom:8px;"><span class="material-icons-round" style="font-size:2.5rem;color:var(--pink);">satellite_alt</span></div>
     <div class="modal-title" style="text-align:center;">Satellite Mode</div>
     <div class="modal-subtitle" style="text-align:center;">Enter your 4-digit secure PIN</div>
     <div class="pin-inputs">
@@ -600,59 +564,65 @@
       <input type="password" maxlength="1" id="pin-2" oninput="pinNext(2)" inputmode="numeric">
       <input type="password" maxlength="1" id="pin-3" oninput="pinNext(3)" inputmode="numeric">
     </div>
-    <button class="btn-primary" onclick="verifySatellitePin()">🔓 Unlock</button>
+    <button class="btn-primary" onclick="verifySatellitePin()"><span class="material-icons-round">lock_open</span> Unlock</button>
     <button class="btn-secondary" onclick="closeModal('modal-satellite-pin')">Cancel</button>
   </div>
 </div>
 
-<!-- ══ MODAL: EDIT FIELD ══ -->
+<!-- MODAL: EDIT FIELD -->
 <div id="modal-edit" class="modal-center-wrap" onclick="if(event.target===this)closeModal('modal-edit')">
   <div class="modal-center">
     <div class="modal-title" id="edit-modal-title">Edit</div>
     <div class="modal-subtitle" id="edit-modal-sub"></div>
-    <div class="edit-field">
-      <input type="text" id="edit-modal-input" placeholder="">
-    </div>
-    <button class="btn-primary" onclick="saveEditField()">Save Changes</button>
+    <div class="edit-field"><input type="text" id="edit-modal-input" placeholder=""></div>
+    <button class="btn-primary" onclick="saveEditField()"><span class="material-icons-round">save</span> Save Changes</button>
     <button class="btn-secondary" onclick="closeModal('modal-edit')">Cancel</button>
   </div>
 </div>
 
-<!-- ══ MODAL: SATELLITE SETTINGS ══ -->
+<!-- MODAL: SATELLITE SETTINGS -->
 <div id="modal-satellite-settings" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-satellite-settings')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="modal-title">🛰️ Satellite Mode Settings</div>
-    <div class="modal-subtitle">Lock chats with a secret PIN</div>
+    <div class="modal-title" style="display:flex;align-items:center;gap:8px;"><span class="material-icons-round" style="color:var(--pink);">satellite_alt</span> Satellite Mode Settings</div>
+    <div class="modal-subtitle">Lock chats with a secret PIN. The PIN is saved to your account.</div>
     <div class="field">
-      <label>Set 4-Digit PIN</label>
+      <label>Current PIN (if changing)</label>
+      <input type="password" id="satellite-pin-current" placeholder="Enter current PIN (leave blank if new)" maxlength="4" inputmode="numeric">
+    </div>
+    <div class="field">
+      <label>New 4-Digit PIN</label>
       <input type="password" id="satellite-pin-set" placeholder="Enter new PIN" maxlength="4" inputmode="numeric">
     </div>
-    <button class="btn-primary" onclick="saveSatellitePin()">Save PIN</button>
+    <div class="field">
+      <label>Confirm PIN</label>
+      <input type="password" id="satellite-pin-confirm" placeholder="Confirm new PIN" maxlength="4" inputmode="numeric">
+    </div>
+    <button class="btn-primary" onclick="saveSatellitePin()"><span class="material-icons-round">save</span> Save PIN</button>
     <button class="btn-secondary" onclick="closeModal('modal-satellite-settings')">Cancel</button>
   </div>
 </div>
 
-<!-- ══ MODAL: CHAT OPTIONS ══ -->
+<!-- MODAL: CHAT OPTIONS -->
 <div id="modal-chat-options" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-chat-options')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title" id="chat-options-name">Chat Options</div>
     <div style="margin-top:16px;">
-      <div class="settings-item" style="border-radius:12px 12px 0 0;background:var(--card);border-bottom:1px solid var(--border);" onclick="toggleSatelliteForChat()">
-        <div class="settings-item-icon">🛰️</div>
+      <div class="settings-item" style="border-radius:12px 12px 0 0;background:var(--card);border-bottom:1px solid var(--border);">
+        <div class="settings-item-icon"><span class="material-icons-round">satellite_alt</span></div>
         <div class="settings-item-text"><h4>Satellite Mode</h4><p id="satellite-chat-status">Enable for this chat</p></div>
         <label class="toggle"><input type="checkbox" id="satellite-chat-toggle" onchange="toggleSatelliteForChat()"><span class="toggle-slider"></span></label>
       </div>
       <div class="settings-item" style="background:var(--card);border-bottom:1px solid var(--border);" onclick="clearChatHistory()">
-        <div class="settings-item-icon">🗑️</div>
+        <div class="settings-item-icon" style="background:#FFEBEE;"><span class="material-icons-round" style="color:#E53935;">delete</span></div>
         <div class="settings-item-text"><h4 style="color:#E53935;">Clear Chat</h4></div>
-        <span class="settings-item-arrow">›</span>
+        <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
       </div>
       <div class="settings-item" style="border-radius:0 0 12px 12px;background:var(--card);" onclick="removeContact()">
-        <div class="settings-item-icon">❌</div>
+        <div class="settings-item-icon" style="background:#FFEBEE;"><span class="material-icons-round" style="color:#E53935;">person_remove</span></div>
         <div class="settings-item-text"><h4 style="color:#E53935;">Remove Contact</h4></div>
-        <span class="settings-item-arrow">›</span>
+        <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
       </div>
     </div>
   </div>
@@ -660,15 +630,14 @@
 
 <!-- Context Menu -->
 <div id="ctx-menu" class="ctx-menu" style="display:none;">
-  <div class="ctx-item danger" onclick="deleteMessage()">🗑️ Delete Message</div>
-  <div class="ctx-item" onclick="document.getElementById('ctx-menu').style.display='none'">✕ Cancel</div>
+  <div class="ctx-item danger" onclick="deleteMessage()"><span class="material-icons-round">delete</span> Delete Message</div>
+  <div class="ctx-item" onclick="document.getElementById('ctx-menu').style.display='none'"><span class="material-icons-round">close</span> Cancel</div>
 </div>
 
-<!-- ══ FIREBASE + APP JS ══ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, push, onValue, update, remove, serverTimestamp, onDisconnect } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { getStorage, ref as sref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { getStorage, ref as sref, uploadString, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCPpdYibTcnJitgEgiiDKpy6mwN3wj5TXg",
@@ -685,50 +654,64 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const storage = getStorage(app);
 
-// ── APP STATE ──
+// ── STATE ──
 let currentUser = null;
 let contacts = {};
 let activeChat = null;
 let messagesListener = null;
 let contactsListener = null;
-let profilePicFile = null;
 let typingTimeout = null;
 let selectedMsgKey = null;
-let pendingChatContact = null; // for satellite pending open
-
-window.APP = { db, storage, ref, set, get, push, onValue, update, remove, serverTimestamp, onDisconnect, sref, uploadBytes, getDownloadURL, deleteObject };
+let pendingChatContact = null;
+let cropperCallback = null;
+let cropState = { scale:1, x:0, y:0, startX:0, startY:0, dragging:false, imgW:0, imgH:0 };
 
 // ── UTILS ──
 function cleanPhone(p){ return p.replace(/\D/g,''); }
-function getChatId(a,b){ const s=[cleanPhone(a),cleanPhone(b)].sort(); return s[0]+'_'+s[1]; }
+function getChatId(a,b){ return [cleanPhone(a),cleanPhone(b)].sort().join('_'); }
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
 function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function openModal(id){ document.getElementById(id).classList.add('open'); }
-function formatTime(ts){ if(!ts)return ''; const d=new Date(ts); return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
-function formatDate(ts){ if(!ts)return ''; const d=new Date(ts); const today=new Date(); if(d.toDateString()===today.toDateString())return 'Today'; const y=new Date(); y.setDate(y.getDate()-1); if(d.toDateString()===y.toDateString())return 'Yesterday'; return d.toLocaleDateString(); }
-function showInAppNotif(name, body, avatar){ if(!document.getElementById('notif-toggle').checked)return; const el=document.getElementById('in-app-notif'); document.getElementById('notif-title').textContent=name; document.getElementById('notif-body').textContent=body; document.getElementById('notif-avatar').textContent=avatar||'👤'; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),3500); }
+function formatTime(ts){ if(!ts)return ''; return new Date(ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
+function formatDate(ts){ if(!ts)return ''; const d=new Date(ts),today=new Date(),y=new Date(); y.setDate(y.getDate()-1); if(d.toDateString()===today.toDateString())return 'Today'; if(d.toDateString()===y.toDateString())return 'Yesterday'; return d.toLocaleDateString(); }
+function showInAppNotif(name,body,photoURL){ if(!document.getElementById('notif-toggle').checked)return; document.getElementById('notif-title').textContent=name; document.getElementById('notif-body').textContent=body; const av=document.getElementById('notif-avatar'); if(photoURL){ av.innerHTML=`<img src="${photoURL}" style="width:100%;height:100%;object-fit:cover;">`; } else { av.innerHTML=`<span class="material-icons-round">person</span>`; } document.getElementById('in-app-notif').classList.add('show'); setTimeout(()=>document.getElementById('in-app-notif').classList.remove('show'),3500); }
 
 window.showScreen = showScreen;
 window.closeModal = closeModal;
 
-// ── LOAD SESSION ──
+// ── DB STRUCTURE ──
+// users/{cp}/profile: {name, phone, email, bio, photoURL, satellitePin}
+// users/{cp}/chats/{otherCp}: {name, phone, photoURL, bio, lastMsg, lastMsgTime, unread}
+// messages/{chatId}/{msgId}: {text, sender, receiver, ts, delivered, seen}
+// presence/{cp}: {online, lastSeen}
+// typing/{chatId}/{cp}: boolean
+
+function userProfileRef(cp){ return ref(db,`users/${cp}/profile`); }
+function userChatsRef(cp){ return ref(db,`users/${cp}/chats`); }
+function userChatRef(cp,otherCp){ return ref(db,`users/${cp}/chats/${otherCp}`); }
+
+// ── INIT ──
 window.addEventListener('load', async()=>{
-  const saved = localStorage.getItem('idchat_user');
+  const saved=localStorage.getItem('idchat_user');
   if(saved){ currentUser=JSON.parse(saved); await loadUserFromDB(); }
-  setTimeout(()=>{ document.getElementById('loading-screen').classList.add('hide'); setTimeout(()=>{ if(currentUser){ showScreen('screen-home'); initHome(); } else { showScreen('screen-register'); } },600); },2000);
+  setTimeout(()=>{
+    document.getElementById('loading-screen').classList.add('hide');
+    setTimeout(()=>{ if(currentUser){ showScreen('screen-home'); initHome(); } else { showScreen('screen-register'); } },600);
+  },2000);
+  applyDarkMode();
 });
 
 async function loadUserFromDB(){
-  const snap = await get(ref(db,`users/${cleanPhone(currentUser.phone)}`));
+  const snap=await get(userProfileRef(cleanPhone(currentUser.phone)));
   if(snap.exists()){ currentUser={...currentUser,...snap.val()}; localStorage.setItem('idchat_user',JSON.stringify(currentUser)); }
   updatePresence();
 }
 
-// ── PRESENCE ──
 function updatePresence(){
   if(!currentUser)return;
-  const presRef=ref(db,`presence/${cleanPhone(currentUser.phone)}`);
+  const cp=cleanPhone(currentUser.phone);
+  const presRef=ref(db,`presence/${cp}`);
   set(presRef,{online:true,lastSeen:Date.now()});
   onDisconnect(presRef).set({online:false,lastSeen:serverTimestamp()});
 }
@@ -741,45 +724,127 @@ window.handleRegister = async function(){
   if(!name||!phone){ showToast('Please fill all required fields'); return; }
   const cp=cleanPhone(phone);
   if(cp.length<7){ showToast('Enter a valid mobile number'); return; }
-  const snap=await get(ref(db,`users/${cp}`));
-  if(snap.exists()){ currentUser=snap.val(); currentUser.phone=phone; localStorage.setItem('idchat_user',JSON.stringify(currentUser)); showScreen('screen-home'); initHome(); showToast('Welcome back, '+currentUser.name+'!'); return; }
-  currentUser={ name, phone, email, bio:'', photoURL:'' };
+  const snap=await get(userProfileRef(cp));
+  if(snap.exists()){ currentUser=snap.val(); localStorage.setItem('idchat_user',JSON.stringify(currentUser)); showScreen('screen-home'); initHome(); showToast('Welcome back, '+currentUser.name+'!'); return; }
+  currentUser={name,phone,email,bio:'',photoURL:''};
   localStorage.setItem('idchat_user',JSON.stringify(currentUser));
   showScreen('screen-profile');
 };
 
-window.handleProfilePicPreview = function(input){
-  if(!input.files[0])return;
-  profilePicFile=input.files[0];
+// ── PROFILE PIC CROPPER ──
+window.handleProfilePicSelect = function(input, context){
+  if(!input.files||!input.files[0])return;
+  const file=input.files[0];
   const reader=new FileReader();
-  reader.onload=e=>{ const ring=document.getElementById('profile-avatar-ring'); ring.innerHTML=`<img src="${e.target.result}"><input type="file" accept="image/*" id="profile-pic-input" onchange="handleProfilePicPreview(this)">`; };
-  reader.readAsDataURL(profilePicFile);
+  reader.onload=e=>{ openCropper(e.target.result, context); };
+  reader.readAsDataURL(file);
+  input.value=''; // reset so same file can be selected again
 };
 
+function openCropper(src, context){
+  const modal=document.getElementById('cropper-modal');
+  const img=document.getElementById('cropper-img');
+  const slider=document.getElementById('zoom-slider');
+  img.src=src;
+  slider.value=1;
+  cropState={scale:1,x:0,y:0,startX:0,startY:0,dragging:false,imgW:0,imgH:0};
+  modal.classList.add('open');
+  img.onload=()=>{ cropState.imgW=img.naturalWidth; cropState.imgH=img.naturalHeight; applyCropTransform(); };
+  cropperCallback=context;
+}
+
+window.closeCropper=function(){ document.getElementById('cropper-modal').classList.remove('open'); };
+
+function applyCropTransform(){
+  const img=document.getElementById('cropper-img');
+  const container=document.getElementById('cropper-container');
+  const cw=container.offsetWidth, ch=container.offsetHeight;
+  const scale=cropState.scale;
+  const iw=cropState.imgW, ih=cropState.imgH;
+  const fit=Math.max(cw/iw,ch/ih);
+  const dw=iw*fit*scale, dh=ih*fit*scale;
+  const maxX=(dw-cw)/2, maxY=(dh-ch)/2;
+  cropState.x=Math.max(-maxX,Math.min(maxX,cropState.x));
+  cropState.y=Math.max(-maxY,Math.min(maxY,cropState.y));
+  img.style.width=dw+'px'; img.style.height=dh+'px';
+  img.style.left=((cw-dw)/2+cropState.x)+'px';
+  img.style.top=((ch-dh)/2+cropState.y)+'px';
+}
+
+document.getElementById('zoom-slider').addEventListener('input',function(){ cropState.scale=parseFloat(this.value); applyCropTransform(); });
+
+// Drag handling (touch + mouse)
+const cropImg=document.getElementById('cropper-img');
+cropImg.addEventListener('mousedown',e=>{ cropState.dragging=true; cropState.startX=e.clientX-cropState.x; cropState.startY=e.clientY-cropState.y; e.preventDefault(); });
+document.addEventListener('mousemove',e=>{ if(!cropState.dragging)return; cropState.x=e.clientX-cropState.startX; cropState.y=e.clientY-cropState.startY; applyCropTransform(); });
+document.addEventListener('mouseup',()=>{ cropState.dragging=false; });
+cropImg.addEventListener('touchstart',e=>{ const t=e.touches[0]; cropState.dragging=true; cropState.startX=t.clientX-cropState.x; cropState.startY=t.clientY-cropState.y; e.preventDefault(); },{passive:false});
+document.addEventListener('touchmove',e=>{ if(!cropState.dragging)return; const t=e.touches[0]; cropState.x=t.clientX-cropState.startX; cropState.y=t.clientY-cropState.startY; applyCropTransform(); e.preventDefault(); },{passive:false});
+document.addEventListener('touchend',()=>{ cropState.dragging=false; });
+
+window.saveCrop = async function(){
+  const container=document.getElementById('cropper-container');
+  const img=document.getElementById('cropper-img');
+  const cw=container.offsetWidth, ch=container.offsetHeight;
+  const canvas=document.createElement('canvas');
+  canvas.width=300; canvas.height=300;
+  const ctx=canvas.getContext('2d');
+  ctx.beginPath(); ctx.arc(150,150,150,0,Math.PI*2); ctx.clip();
+  const rect=img.getBoundingClientRect();
+  const conRect=container.getBoundingClientRect();
+  const sx=conRect.left-rect.left, sy=conRect.top-rect.top;
+  const scaleRatio=img.naturalWidth/rect.width;
+  ctx.drawImage(img, sx*scaleRatio, sy*scaleRatio, cw*scaleRatio, ch*scaleRatio, 0,0,300,300);
+  const dataURL=canvas.toDataURL('image/jpeg',0.85);
+  closeCropper();
+  showToast('Uploading photo...');
+  try {
+    const url=await uploadImageDataURL(dataURL,`avatars/${cleanPhone(currentUser.phone)}`);
+    currentUser.photoURL=url;
+    await saveUserProfile();
+    updateHeaderUI(); updateSettingsUI();
+    // update profile pic preview in profile setup screen too
+    const ring=document.getElementById('profile-avatar-ring');
+    if(ring){ ring.innerHTML=`<img src="${url}"><input type="file" accept="image/*" id="profile-pic-input" onchange="handleProfilePicSelect(this,'profile')">`; }
+    showToast('Profile picture updated!');
+  } catch(e){ console.error(e); showToast('Upload failed: '+e.message); }
+};
+
+async function uploadImageDataURL(dataURL, path){
+  const r=sref(storage,path);
+  // uploadString with 'data_url' format
+  await uploadString(r, dataURL, 'data_url');
+  return getDownloadURL(r);
+}
+
+window.handleProfilePicPreview = window.handleProfilePicSelect; // alias
+
+// ── PROFILE ──
 window.handleProfileSave = async function(){
   const bio=document.getElementById('reg-bio').value.trim();
   currentUser.bio=bio;
-  if(profilePicFile){ try{ const url=await uploadImage(profilePicFile,`avatars/${cleanPhone(currentUser.phone)}`); currentUser.photoURL=url; }catch(e){} }
-  await saveUserToDB();
+  await saveUserProfile();
   showScreen('screen-home'); initHome(); showToast('Welcome, '+currentUser.name+'! 🎉');
 };
 
 window.handleProfileSkip = async function(){
-  await saveUserToDB();
-  showScreen('screen-home'); initHome(); showToast('Welcome, '+currentUser.name+'! 🎉');
+  await saveUserProfile();
+  showScreen('screen-home'); initHome(); showToast('Welcome, '+currentUser.name+'!');
 };
 
-async function saveUserToDB(){
+async function saveUserProfile(){
   const cp=cleanPhone(currentUser.phone);
-  await set(ref(db,`users/${cp}`),{ name:currentUser.name, phone:currentUser.phone, email:currentUser.email||'', bio:currentUser.bio||'', photoURL:currentUser.photoURL||'' });
+  const profileData={
+    name:currentUser.name||'',
+    phone:currentUser.phone||'',
+    email:currentUser.email||'',
+    bio:currentUser.bio||'',
+    photoURL:currentUser.photoURL||''
+  };
+  if(currentUser.satellitePin) profileData.satellitePin=currentUser.satellitePin;
+  await set(userProfileRef(cp), profileData);
   localStorage.setItem('idchat_user',JSON.stringify(currentUser));
   updatePresence();
-}
-
-async function uploadImage(file, path){
-  const r=sref(storage, path);
-  await uploadBytes(r, file);
-  return getDownloadURL(r);
 }
 
 // ── HOME ──
@@ -793,7 +858,7 @@ function updateHeaderUI(){
   if(!currentUser)return;
   const ha=document.getElementById('home-avatar');
   if(currentUser.photoURL){ ha.innerHTML=`<img src="${currentUser.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`; }
-  else { ha.textContent=currentUser.name?currentUser.name[0].toUpperCase():'U'; }
+  else { ha.innerHTML=`<span class="material-icons-round">${currentUser.name?'person':'person'}</span>`; }
 }
 
 function updateSettingsUI(){
@@ -803,24 +868,24 @@ function updateSettingsUI(){
   document.getElementById('s-name-preview').textContent=currentUser.name||'';
   document.getElementById('s-phone-preview').textContent=currentUser.phone||'';
   document.getElementById('s-email-preview').textContent=currentUser.email||'';
-  document.getElementById('s-bio-preview').textContent=currentUser.bio||'';
+  document.getElementById('s-bio-preview').textContent=currentUser.bio||'No bio set';
   const sa=document.getElementById('settings-avatar');
-  if(currentUser.photoURL){ sa.innerHTML=`<img src="${currentUser.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`; const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.id='settings-pic-input';inp.style.display='none';inp.onchange=function(){changeProfilePic(this);};sa.appendChild(inp); }
-  else { sa.textContent=currentUser.name?currentUser.name[0].toUpperCase():'👤'; const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.id='settings-pic-input';inp.style.display='none';inp.onchange=function(){changeProfilePic(this);};sa.appendChild(inp); }
+  if(currentUser.photoURL){ sa.innerHTML=`<img src="${currentUser.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"><input type="file" accept="image/*" id="settings-pic-input" style="display:none" onchange="handleProfilePicSelect(this,'settings')">`; }
+  else { sa.innerHTML=`<span class="material-icons-round" style="font-size:2.5rem;">person</span><input type="file" accept="image/*" id="settings-pic-input" style="display:none" onchange="handleProfilePicSelect(this,'settings')">`; }
   const dm=localStorage.getItem('idchat_dark')==='true';
   document.getElementById('dark-mode-toggle').checked=dm;
-  if(dm) document.documentElement.setAttribute('data-theme','dark');
+  if(document.getElementById('dark-mode-toggle2')) document.getElementById('dark-mode-toggle2').checked=dm;
 }
 
 function loadContacts(){
   if(!currentUser)return;
   const cp=cleanPhone(currentUser.phone);
   if(contactsListener) contactsListener();
-  contactsListener=onValue(ref(db,`contacts/${cp}`), snap=>{
+  contactsListener=onValue(ref(db,`users/${cp}/chats`), snap=>{
     contacts={};
     const cl=document.getElementById('chat-list');
     cl.innerHTML='';
-    if(!snap.exists()){ cl.innerHTML=`<div class="empty-state"><div class="empty-icon">💬</div><h3>No chats yet</h3><p>Tap + to add contacts and start chatting</p></div>`; return; }
+    if(!snap.exists()){ cl.innerHTML=`<div class="empty-state"><span class="material-icons-round empty-icon" style="font-size:4rem;">chat_bubble_outline</span><h3>No chats yet</h3><p>Tap + to add contacts and start chatting</p></div>`; return; }
     const data=snap.val();
     const list=Object.values(data);
     list.sort((a,b)=>(b.lastMsgTime||0)-(a.lastMsgTime||0));
@@ -830,13 +895,14 @@ function loadContacts(){
 
 function renderChatItem(contact){
   const cp2=cleanPhone(contact.phone);
-  const isSat=localStorage.getItem(`satellite_${cp2}`)!=null;
+  const isSat=!!currentUser.satellitePin&&localStorage.getItem(`satellite_${cp2}`)!=null;
   const div=document.createElement('div');
-  div.className='chat-item'+(isSat?' satellite-locked':'');
+  div.className='chat-item';
   div.id=`chat-item-${cp2}`;
+  const initials=contact.name?contact.name[0].toUpperCase():'?';
   div.innerHTML=`
     <div class="chat-avatar" id="avatar-${cp2}">
-      ${contact.photoURL?`<img src="${contact.photoURL}">`:(contact.name?contact.name[0].toUpperCase():'👤')}
+      ${contact.photoURL?`<img src="${contact.photoURL}">`:`<span>${initials}</span>`}
       <div class="online-dot" id="dot-${cp2}" style="display:none;"></div>
     </div>
     <div class="chat-info">
@@ -845,8 +911,8 @@ function renderChatItem(contact){
         <span class="chat-time" id="time-${cp2}">${contact.lastMsgTime?formatTime(contact.lastMsgTime):''}</span>
       </div>
       <div class="chat-preview">
-        ${isSat?'<span style="font-size:0.75rem;">🛰️</span>':''}
-        <span class="chat-preview-text" id="preview-${cp2}">${isSat&&contact.lastMsg?'🔒 Secure Message':contact.lastMsg||'Tap to start chatting'}</span>
+        ${isSat?'<span class="material-icons-round" style="font-size:0.85rem;color:var(--pink);">satellite_alt</span>':''}
+        <span class="chat-preview-text" id="preview-${cp2}">${isSat&&contact.lastMsg?'Secure Message':contact.lastMsg||'Tap to start chatting'}</span>
       </div>
     </div>
     ${contact.unread>0?`<div class="unread-badge">${contact.unread}</div>`:''}
@@ -857,15 +923,14 @@ function renderChatItem(contact){
     div.addEventListener('touchend',()=>clearTimeout(pressTimer));
     div.addEventListener('mousedown',()=>{ pressTimer=setTimeout(()=>{ pendingChatContact=contact; openSatellitePinModal(); },600); });
     div.addEventListener('mouseup',()=>clearTimeout(pressTimer));
-    div.addEventListener('click',()=>{ showToast('🛰️ Long press to open satellite chat'); });
+    div.addEventListener('click',()=>{ showToast('Long press to open satellite chat'); });
   } else {
     div.addEventListener('click',()=>openChat(contact));
   }
   document.getElementById('chat-list').appendChild(div);
-  // presence
   onValue(ref(db,`presence/${cp2}`),snap=>{
     const dot=document.getElementById(`dot-${cp2}`);
-    if(dot){ if(snap.exists()&&snap.val().online){ dot.style.display='block'; } else { dot.style.display='none'; } }
+    if(dot){ dot.style.display=(snap.exists()&&snap.val().online)?'block':'none'; }
   });
 }
 
@@ -879,31 +944,29 @@ window.searchContact = async function(){
   const phone=document.getElementById('search-phone').value.trim();
   if(!phone){ showToast('Enter a mobile number'); return; }
   const cp=cleanPhone(phone);
-  const snap=await get(ref(db,`users/${cp}`));
+  const snap=await get(userProfileRef(cp));
   const res=document.getElementById('contact-search-result');
   if(!snap.exists()){ res.style.display='block'; res.innerHTML=`<p style="color:var(--pink);font-weight:700;text-align:center;padding:16px;">No user found with this number</p>`; return; }
   const u=snap.val();
+  const initials=u.name?u.name[0].toUpperCase():'?';
   res.style.display='block';
   res.innerHTML=`
     <div class="contact-result">
-      <div class="contact-result-avatar">${u.photoURL?`<img src="${u.photoURL}">`:(u.name?u.name[0].toUpperCase():'👤')}</div>
-      <div class="contact-result-info">
-        <h4>${u.name}</h4>
-        <p>${u.phone}</p>
-        ${u.bio?`<p style="margin-top:2px;">${u.bio}</p>`:''}
-      </div>
+      <div class="contact-result-avatar">${u.photoURL?`<img src="${u.photoURL}">`:`<span>${initials}</span>`}</div>
+      <div class="contact-result-info"><h4>${u.name}</h4><p>${u.phone}</p>${u.bio?`<p style="margin-top:2px;">${u.bio}</p>`:''}</div>
     </div>
-    <button class="btn-primary" onclick="addContact('${cp}')">Add Contact ✓</button>
+    <button class="btn-primary" onclick="addContact('${cp}')"><span class="material-icons-round">person_add</span> Add Contact</button>
     <button class="btn-secondary" onclick="closeModal('modal-add-contact')">Cancel</button>
   `;
 };
 
 window.addContact = async function(cp){
-  const snap=await get(ref(db,`users/${cp}`));
+  const snap=await get(userProfileRef(cp));
   if(!snap.exists())return;
   const u=snap.val();
   const mycp=cleanPhone(currentUser.phone);
-  await set(ref(db,`contacts/${mycp}/${cp}`),{ name:u.name, phone:u.phone, photoURL:u.photoURL||'', bio:u.bio||'', lastMsg:'', lastMsgTime:0, unread:0 });
+  const contactData={name:u.name,phone:u.phone,photoURL:u.photoURL||'',bio:u.bio||'',lastMsg:'',lastMsgTime:0,unread:0};
+  await set(userChatRef(mycp,cp), contactData);
   closeModal('modal-add-contact');
   showToast(u.name+' added!');
 };
@@ -912,9 +975,10 @@ window.addContact = async function(cp){
 window.openChat = function(contact){
   activeChat=contact;
   document.getElementById('chat-header-name').textContent=contact.name;
-  const ha=document.getElementById('chat-header-avatar');
-  ha.innerHTML=contact.photoURL?`<img src="${contact.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`:(contact.name?contact.name[0].toUpperCase():'👤');
   document.getElementById('chat-options-name').textContent=contact.name;
+  const ha=document.getElementById('chat-header-avatar');
+  if(contact.photoURL){ ha.innerHTML=`<img src="${contact.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`; }
+  else { ha.innerHTML=`<span class="material-icons-round">person</span>`; }
   const isSat=localStorage.getItem(`satellite_${cleanPhone(contact.phone)}`)!=null;
   const st=document.getElementById('satellite-chat-toggle');
   if(st){ st.checked=isSat; }
@@ -933,40 +997,31 @@ window.backToHome = function(){
 };
 
 function loadMessages(){
-  if(messagesListener){ messagesListener(); }
+  if(messagesListener) messagesListener();
   const chatId=getChatId(currentUser.phone,activeChat.phone);
   const msgsArea=document.getElementById('messages-area');
   msgsArea.innerHTML='';
   let lastDate='';
   messagesListener=onValue(ref(db,`messages/${chatId}`), snap=>{
-    msgsArea.innerHTML='';
-    lastDate='';
-    if(!snap.exists()){ msgsArea.innerHTML=`<div style="text-align:center;padding:40px 20px;"><div style="font-size:3rem;">👋</div><p style="color:var(--text-muted);font-weight:600;margin-top:8px;">Say hello!</p></div>`; return; }
-    snap.forEach(child=>{
-      const msg={...child.val(),key:child.key};
-      const d=formatDate(msg.ts);
-      if(d!==lastDate){ const div=document.createElement('div'); div.className='date-divider'; div.innerHTML=`<span>${d}</span>`; msgsArea.appendChild(div); lastDate=d; }
-      renderMessage(msg);
-    });
+    msgsArea.innerHTML=''; lastDate='';
+    if(!snap.exists()){ msgsArea.innerHTML=`<div style="text-align:center;padding:40px 20px;"><span class="material-icons-round" style="font-size:3rem;color:var(--pink-light);">waving_hand</span><p style="color:var(--text-muted);font-weight:600;margin-top:8px;">Say hello!</p></div>`; return; }
+    snap.forEach(child=>{ const msg={...child.val(),key:child.key}; const d=formatDate(msg.ts); if(d!==lastDate){ const dv=document.createElement('div'); dv.className='date-divider'; dv.innerHTML=`<span>${d}</span>`; msgsArea.appendChild(dv); lastDate=d; } renderMessage(msg); });
     msgsArea.scrollTop=msgsArea.scrollHeight;
   });
-  // Typing
   onValue(ref(db,`typing/${chatId}/${cleanPhone(activeChat.phone)}`), snap=>{
     const status=document.getElementById('chat-header-status');
-    if(snap.val()===true){ status.textContent='typing...'; status.className='chat-header-status online'; }
-    else { checkOnlineStatus(); }
+    if(snap.val()===true){ status.textContent='typing...'; status.className='chat-header-status online'; } else { checkPresence(); }
   });
-  // Online
-  onValue(ref(db,`presence/${cleanPhone(activeChat.phone)}`),snap=>{
+  onValue(ref(db,`presence/${cleanPhone(activeChat.phone)}`), snap=>{
     const status=document.getElementById('chat-header-status');
     if(status.textContent==='typing...')return;
     if(snap.exists()&&snap.val().online){ status.textContent='Online'; status.className='chat-header-status online'; }
-    else if(snap.exists()&&snap.val().lastSeen){ const ls=snap.val().lastSeen; status.textContent='Last seen '+formatTime(ls); status.className='chat-header-status'; }
+    else if(snap.exists()&&snap.val().lastSeen){ status.textContent='Last seen '+formatTime(snap.val().lastSeen); status.className='chat-header-status'; }
     else { status.textContent='Offline'; status.className='chat-header-status'; }
   });
 }
 
-function checkOnlineStatus(){}
+function checkPresence(){}
 
 function renderMessage(msg){
   const msgsArea=document.getElementById('messages-area');
@@ -975,31 +1030,20 @@ function renderMessage(msg){
   row.className=`msg-row ${isSent?'sent':'recv'}`;
   row.dataset.key=msg.key;
   let ticks='';
-  if(isSent){ ticks=msg.seen?`<span class="tick seen">✓✓</span>`:msg.delivered?`<span class="tick">✓✓</span>`:`<span class="tick">✓</span>`; }
-  row.innerHTML=`
-    <div class="msg-bubble">
-      ${msg.text}
-      <div class="msg-meta">
-        <span>${formatTime(msg.ts)}</span>
-        ${ticks}
-      </div>
-    </div>
-  `;
+  if(isSent){ ticks=msg.seen?`<span class="tick seen"><span class="material-icons-round">done_all</span></span>`:msg.delivered?`<span class="tick"><span class="material-icons-round">done_all</span></span>`:`<span class="tick"><span class="material-icons-round">done</span></span>`; }
+  row.innerHTML=`<div class="msg-bubble">${escapeHtml(msg.text)}<div class="msg-meta"><span>${formatTime(msg.ts)}</span>${ticks}</div></div>`;
   row.addEventListener('contextmenu',e=>{ e.preventDefault(); if(isSent){ selectedMsgKey=msg.key; showCtxMenu(e.clientX,e.clientY); } });
-  row.addEventListener('touchstart',function(e){ if(!isSent)return; let timer=setTimeout(()=>{ selectedMsgKey=msg.key; showCtxMenu(e.touches[0].clientX,e.touches[0].clientY); },600); row.addEventListener('touchend',()=>clearTimeout(timer),{once:true}); });
+  row.addEventListener('touchstart',function(e){ if(!isSent)return; let t=setTimeout(()=>{ selectedMsgKey=msg.key; showCtxMenu(e.touches[0].clientX,e.touches[0].clientY); },600); row.addEventListener('touchend',()=>clearTimeout(t),{once:true}); });
   msgsArea.appendChild(row);
 }
 
-function showCtxMenu(x,y){
-  const m=document.getElementById('ctx-menu');
-  m.style.display='block'; m.style.left=Math.min(x,window.innerWidth-180)+'px'; m.style.top=Math.min(y,window.innerHeight-80)+'px';
-  setTimeout(()=>document.addEventListener('click',()=>{ m.style.display='none'; },{once:true}),100);
-}
+function escapeHtml(t){ const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+
+function showCtxMenu(x,y){ const m=document.getElementById('ctx-menu'); m.style.display='block'; m.style.left=Math.min(x,window.innerWidth-180)+'px'; m.style.top=Math.min(y,window.innerHeight-80)+'px'; setTimeout(()=>document.addEventListener('click',()=>{ m.style.display='none'; },{once:true}),100); }
 
 window.deleteMessage = async function(){
   if(!selectedMsgKey||!activeChat)return;
-  const chatId=getChatId(currentUser.phone,activeChat.phone);
-  await remove(ref(db,`messages/${chatId}/${selectedMsgKey}`));
+  await remove(ref(db,`messages/${getChatId(currentUser.phone,activeChat.phone)}/${selectedMsgKey}`));
   document.getElementById('ctx-menu').style.display='none';
   showToast('Message deleted');
 };
@@ -1011,16 +1055,17 @@ window.sendMessage = async function(){
   input.value='';
   const chatId=getChatId(currentUser.phone,activeChat.phone);
   const mycp=cleanPhone(currentUser.phone);
+  const otherCp=cleanPhone(activeChat.phone);
   const msgRef=push(ref(db,`messages/${chatId}`));
   const ts=Date.now();
-  await set(msgRef,{ text, sender:currentUser.phone, receiver:activeChat.phone, ts, delivered:false, seen:false });
-  // update contact last msg
-  await update(ref(db,`contacts/${mycp}/${cleanPhone(activeChat.phone)}`),{ lastMsg:text, lastMsgTime:ts });
-  await update(ref(db,`contacts/${cleanPhone(activeChat.phone)}/${mycp}`),{ lastMsg:text, lastMsgTime:ts, unread:1, name:currentUser.name, phone:currentUser.phone, photoURL:currentUser.photoURL||'' });
-  // clear typing
+  await set(msgRef,{text,sender:currentUser.phone,receiver:activeChat.phone,ts,delivered:false,seen:false});
+  await update(userChatRef(mycp,otherCp),{lastMsg:text,lastMsgTime:ts});
+  // Update/create contact entry on receiver side
+  const recvSnap=await get(userChatRef(otherCp,mycp));
+  const existing=recvSnap.exists()?recvSnap.val():{};
+  await set(userChatRef(otherCp,mycp),{...existing,name:currentUser.name,phone:currentUser.phone,photoURL:currentUser.photoURL||'',bio:currentUser.bio||'',lastMsg:text,lastMsgTime:ts,unread:(existing.unread||0)+1});
   set(ref(db,`typing/${chatId}/${mycp}`),false);
-  // in-app notif for receiver (if same device testing)
-  showInAppNotif(currentUser.name, text, currentUser.name?currentUser.name[0]:'👤');
+  showInAppNotif(currentUser.name,text,currentUser.photoURL);
 };
 
 window.handleTyping = function(){
@@ -1035,40 +1080,43 @@ window.handleTyping = function(){
 function markAsRead(){
   if(!activeChat)return;
   const mycp=cleanPhone(currentUser.phone);
-  update(ref(db,`contacts/${mycp}/${cleanPhone(activeChat.phone)}`),{ unread:0 });
-  // mark seen
+  const otherCp=cleanPhone(activeChat.phone);
+  update(userChatRef(mycp,otherCp),{unread:0});
   const chatId=getChatId(currentUser.phone,activeChat.phone);
-  get(ref(db,`messages/${chatId}`)).then(snap=>{ if(!snap.exists())return; snap.forEach(child=>{ if(child.val().sender!==currentUser.phone&&!child.val().seen){ update(ref(db,`messages/${chatId}/${child.key}`),{seen:true,delivered:true}); } }); });
+  get(ref(db,`messages/${chatId}`)).then(snap=>{
+    if(!snap.exists())return;
+    snap.forEach(child=>{ if(child.val().sender!==currentUser.phone&&!child.val().seen){ update(ref(db,`messages/${chatId}/${child.key}`),{seen:true,delivered:true}); } });
+  });
 }
 
 // ── SATELLITE MODE ──
-function openSatellitePinModal(){
-  ['pin-0','pin-1','pin-2','pin-3'].forEach(id=>{ document.getElementById(id).value=''; });
-  openModal('modal-satellite-pin');
-  setTimeout(()=>document.getElementById('pin-0').focus(),100);
-}
+function openSatellitePinModal(){ ['pin-0','pin-1','pin-2','pin-3'].forEach(id=>{ document.getElementById(id).value=''; }); openModal('modal-satellite-pin'); setTimeout(()=>document.getElementById('pin-0').focus(),100); }
 
-window.pinNext = function(i){
-  if(document.getElementById(`pin-${i}`).value.length===1&&i<3){ document.getElementById(`pin-${i+1}`).focus(); }
-};
+window.pinNext = function(i){ if(document.getElementById(`pin-${i}`).value.length===1&&i<3){ document.getElementById(`pin-${i+1}`).focus(); } };
 
 window.verifySatellitePin = function(){
   const entered=['pin-0','pin-1','pin-2','pin-3'].map(id=>document.getElementById(id).value).join('');
   const contact=pendingChatContact;
   if(!contact)return;
-  const saved=localStorage.getItem(`satellite_${cleanPhone(contact.phone)}`);
+  const saved=currentUser.satellitePin;
   if(entered===saved){ closeModal('modal-satellite-pin'); openChat(contact); pendingChatContact=null; }
-  else { showToast('❌ Wrong PIN'); ['pin-0','pin-1','pin-2','pin-3'].forEach(id=>{ document.getElementById(id).value=''; }); document.getElementById('pin-0').focus(); }
+  else { showToast('Wrong PIN'); ['pin-0','pin-1','pin-2','pin-3'].forEach(id=>document.getElementById(id).value=''); document.getElementById('pin-0').focus(); }
 };
 
-window.openSatelliteSettings = function(){ openModal('modal-satellite-settings'); closeModal('modal-chat-options'); };
+window.openSatelliteSettings = function(){ document.getElementById('satellite-pin-set').value=''; document.getElementById('satellite-pin-confirm').value=''; document.getElementById('satellite-pin-current').value=''; openModal('modal-satellite-settings'); closeModal('modal-chat-options'); };
 
-window.saveSatellitePin = function(){
-  const pin=document.getElementById('satellite-pin-set').value.trim();
-  if(pin.length!==4||isNaN(pin)){ showToast('Enter a valid 4-digit PIN'); return; }
-  localStorage.setItem('satellite_global_pin',pin);
+window.saveSatellitePin = async function(){
+  const currentPin=document.getElementById('satellite-pin-current').value.trim();
+  const newPin=document.getElementById('satellite-pin-set').value.trim();
+  const confirmPin=document.getElementById('satellite-pin-confirm').value.trim();
+  if(newPin.length!==4||isNaN(newPin)){ showToast('Enter a valid 4-digit PIN'); return; }
+  if(newPin!==confirmPin){ showToast('PINs do not match'); return; }
+  // If user has existing PIN, verify it first
+  if(currentUser.satellitePin&&currentPin!==currentUser.satellitePin){ showToast('Current PIN is incorrect'); return; }
+  currentUser.satellitePin=newPin;
+  await saveUserProfile();
   closeModal('modal-satellite-settings');
-  showToast('🛰️ Satellite PIN saved!');
+  showToast('Satellite PIN saved!');
 };
 
 window.toggleSatelliteForChat = function(){
@@ -1076,48 +1124,34 @@ window.toggleSatelliteForChat = function(){
   const cp=cleanPhone(activeChat.phone);
   const tog=document.getElementById('satellite-chat-toggle');
   if(tog.checked){
-    const pin=localStorage.getItem('satellite_global_pin');
-    if(!pin){ showToast('Set a Satellite PIN first in settings'); tog.checked=false; return; }
-    localStorage.setItem(`satellite_${cp}`,pin);
-    showToast('🛰️ Satellite Mode enabled!');
-  } else {
-    localStorage.removeItem(`satellite_${cp}`);
-    showToast('Satellite Mode disabled');
-  }
+    if(!currentUser.satellitePin){ showToast('Set a Satellite PIN first in settings'); tog.checked=false; return; }
+    localStorage.setItem(`satellite_${cp}`,'1');
+    showToast('Satellite Mode enabled!');
+  } else { localStorage.removeItem(`satellite_${cp}`); showToast('Satellite Mode disabled'); }
   document.getElementById('satellite-chat-status').textContent=tog.checked?'Enabled for this chat':'Enable for this chat';
   loadContacts();
 };
 
 // ── CHAT OPTIONS ──
 window.openChatOptions = function(){ openModal('modal-chat-options'); };
-
-window.clearChatHistory = async function(){
-  if(!activeChat)return;
-  const chatId=getChatId(currentUser.phone,activeChat.phone);
-  await remove(ref(db,`messages/${chatId}`));
-  closeModal('modal-chat-options'); showToast('Chat cleared');
-};
-
+window.clearChatHistory = async function(){ if(!activeChat)return; await remove(ref(db,`messages/${getChatId(currentUser.phone,activeChat.phone)}`)); closeModal('modal-chat-options'); showToast('Chat cleared'); };
 window.removeContact = async function(){
   if(!activeChat)return;
   const mycp=cleanPhone(currentUser.phone);
-  await remove(ref(db,`contacts/${mycp}/${cleanPhone(activeChat.phone)}`));
+  await remove(userChatRef(mycp,cleanPhone(activeChat.phone)));
   closeModal('modal-chat-options'); backToHome(); showToast('Contact removed');
 };
 
 // ── SETTINGS ──
-window.changeProfilePic = async function(input){
-  if(!input.files[0])return;
-  showToast('Uploading...');
-  const url=await uploadImage(input.files[0],`avatars/${cleanPhone(currentUser.phone)}`);
-  currentUser.photoURL=url;
-  await saveUserToDB();
-  updateHeaderUI(); updateSettingsUI(); showToast('Profile picture updated!');
-};
+window.changeProfilePic = function(input){ handleProfilePicSelect(input,'settings'); };
 
 window.removeProfilePic = async function(){
+  // Remove from storage
+  if(currentUser.photoURL){
+    try{ const imgRef=sref(storage,`avatars/${cleanPhone(currentUser.phone)}`); await deleteObject(imgRef); }catch(e){}
+  }
   currentUser.photoURL='';
-  await saveUserToDB();
+  await saveUserProfile();
   updateHeaderUI(); updateSettingsUI(); showToast('Profile picture removed');
 };
 
@@ -1138,38 +1172,68 @@ window.saveEditField = async function(){
   const val=document.getElementById('edit-modal-input').value.trim();
   if(!val){ showToast('Field cannot be empty'); return; }
   currentUser[editingField]=val;
-  await saveUserToDB();
+  await saveUserProfile();
   updateSettingsUI(); closeModal('modal-edit'); showToast('Updated!');
 };
 
-window.toggleDarkMode = function(on){
-  if(on){ document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('idchat_dark','true'); }
-  else { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('idchat_dark','false'); }
-};
+window.toggleDarkMode = function(on){ if(on){ document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('idchat_dark','true'); } else { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('idchat_dark','false'); } if(document.getElementById('dark-mode-toggle2')) document.getElementById('dark-mode-toggle2').checked=on; };
+window.syncDarkMode = function(on){ document.getElementById('dark-mode-toggle').checked=on; toggleDarkMode(on); };
+function applyDarkMode(){ if(localStorage.getItem('idchat_dark')==='true'){ document.documentElement.setAttribute('data-theme','dark'); document.getElementById('dark-mode-toggle').checked=true; } }
 
 window.logout = function(){
-  if(!confirm('Are you sure you want to log out?'))return;
+  if(!confirm('Log out? Your data will be saved.'))return;
   if(currentUser){ set(ref(db,`presence/${cleanPhone(currentUser.phone)}`),{online:false,lastSeen:Date.now()}); }
   localStorage.removeItem('idchat_user');
   currentUser=null; contacts={};
   showScreen('screen-register'); showToast('Logged out');
 };
 
-// ── SEARCH ──
-window.filterChats = function(q){
-  document.querySelectorAll('.chat-item').forEach(el=>{
-    const name=el.querySelector('.chat-name')?.textContent||'';
-    el.style.display=name.toLowerCase().includes(q.toLowerCase())?'':'none';
-  });
+window.deleteAccount = async function(){
+  if(!confirm('Delete your account? This will permanently remove ALL your data and cannot be undone.'))return;
+  if(!currentUser)return;
+  const cp=cleanPhone(currentUser.phone);
+  showToast('Deleting account...');
+  try {
+    // Remove profile picture from storage
+    if(currentUser.photoURL){ try{ await deleteObject(sref(storage,`avatars/${cp}`)); }catch(e){} }
+    // Remove presence
+    await remove(ref(db,`presence/${cp}`));
+    // Remove all messages in chats
+    const chatsSnap=await get(ref(db,`users/${cp}/chats`));
+    if(chatsSnap.exists()){
+      const chatKeys=Object.keys(chatsSnap.val());
+      for(const otherCp of chatKeys){
+        const chatId=getChatId(currentUser.phone,otherCp);
+        await remove(ref(db,`messages/${chatId}`));
+        // Remove this user from other person's contact list
+        await remove(userChatRef(otherCp,cp));
+      }
+    }
+    // Remove user profile + chats node
+    await remove(ref(db,`users/${cp}`));
+    localStorage.removeItem('idchat_user');
+    currentUser=null; contacts={};
+    showScreen('screen-register');
+    showToast('Account deleted');
+  } catch(e){ showToast('Error: '+e.message); }
 };
 
-window.showTab = function(tab, btn){
-  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  if(tab==='status'){ showToast('Status feature coming soon!'); }
+window.clearAllChats = async function(){
+  if(!currentUser||!confirm('Clear all chat history?'))return;
+  const cp=cleanPhone(currentUser.phone);
+  const chatsSnap=await get(ref(db,`users/${cp}/chats`));
+  if(chatsSnap.exists()){
+    for(const otherCp of Object.keys(chatsSnap.val())){
+      const chatId=getChatId(currentUser.phone,otherCp);
+      await remove(ref(db,`messages/${chatId}`));
+    }
+  }
+  showToast('All chats cleared');
 };
 
-// Apply saved dark mode on load
+window.filterChats = function(q){ document.querySelectorAll('.chat-item').forEach(el=>{ const name=el.querySelector('.chat-name')?.textContent||''; el.style.display=name.toLowerCase().includes(q.toLowerCase())?'':'none'; }); };
+window.showTab = function(tab,btn){ document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); };
+
 if(localStorage.getItem('idchat_dark')==='true'){ document.documentElement.setAttribute('data-theme','dark'); }
 </script>
 </body>
