@@ -48,7 +48,6 @@
   }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow:hidden; transition:var(--transition); }
-
   .material-icons-round { font-size:1.2rem; vertical-align:middle; line-height:1; }
 
   /* LOADING */
@@ -84,6 +83,7 @@
   .field textarea { resize:none; min-height:80px; }
   .btn-primary { width:100%; padding:16px; border:none; border-radius:var(--radius-sm); background:linear-gradient(135deg,var(--pink),var(--pink-deep)); color:#fff; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:800; cursor:pointer; transition:var(--transition); box-shadow:0 4px 20px rgba(233,30,140,0.4); letter-spacing:0.5px; display:flex; align-items:center; justify-content:center; gap:8px; }
   .btn-primary:active { transform:scale(0.97); }
+  .btn-primary:disabled { opacity:0.6; cursor:not-allowed; }
   .btn-secondary { width:100%; padding:14px; border:2px solid var(--border); border-radius:var(--radius-sm); background:transparent; color:var(--text-muted); font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:700; cursor:pointer; margin-top:12px; transition:var(--transition); display:flex; align-items:center; justify-content:center; gap:8px; }
   .btn-danger { width:100%; padding:14px; border:2px solid #FFCDD2; border-radius:var(--radius-sm); background:transparent; color:#E53935; font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:700; cursor:pointer; margin-top:12px; transition:var(--transition); display:flex; align-items:center; justify-content:center; gap:8px; }
   .btn-secondary:active { background:var(--pink-pale); }
@@ -94,7 +94,7 @@
   .avatar-ring:hover { border-color:var(--pink); }
   .avatar-ring img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
   .avatar-ring .avatar-placeholder { font-size:2.5rem; color:var(--pink-light); }
-  .avatar-ring input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .avatar-ring input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
   .avatar-upload span { margin-top:10px; font-size:0.82rem; font-weight:700; color:var(--pink); }
 
   /* HOME */
@@ -102,7 +102,7 @@
   .home-header { background:var(--card); padding:16px 20px 14px; box-shadow:var(--shadow-sm); display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); flex-shrink:0; }
   .header-logo { font-family:'Pacifico',cursive; font-size:1.4rem; background:linear-gradient(135deg,var(--pink),var(--pink-deep)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; flex:1; }
   .header-avatar { width:40px; height:40px; border-radius:50%; background:var(--pink-pale); border:2px solid var(--pink-light); object-fit:cover; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; overflow:hidden; color:var(--pink); }
-  .header-avatar img { width:100%; height:100%; object-fit:cover; }
+  .header-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
   .icon-btn { width:40px; height:40px; border-radius:50%; border:none; background:var(--pink-pale); color:var(--pink); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:var(--transition); flex-shrink:0; }
   .icon-btn:active { background:var(--pink-glass); transform:scale(0.92); }
   .search-bar { padding:12px 16px; flex-shrink:0; }
@@ -169,8 +169,8 @@
   #screen-settings { background:var(--bg); overflow-y:auto; }
   .settings-header { background:linear-gradient(135deg,var(--pink),var(--pink-deep)); padding:50px 20px 30px; }
   .settings-profile { display:flex; flex-direction:column; align-items:center; gap:12px; }
-  .settings-avatar { width:80px; height:80px; border-radius:50%; border:3px solid rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center; overflow:hidden; background:rgba(255,255,255,0.2); cursor:pointer; color:#fff; }
-  .settings-avatar img { width:100%; height:100%; object-fit:cover; }
+  .settings-avatar { width:80px; height:80px; border-radius:50%; border:3px solid rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center; overflow:hidden; background:rgba(255,255,255,0.2); cursor:pointer; color:#fff; position:relative; }
+  .settings-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
   .settings-name { color:#fff; font-size:1.2rem; font-weight:800; }
   .settings-phone { color:rgba(255,255,255,0.8); font-size:0.85rem; font-weight:600; }
   .settings-section { padding:20px 16px 0; }
@@ -235,11 +235,10 @@
   #cropper-modal { position:fixed; inset:0; z-index:10000; background:rgba(0,0,0,0.92); display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
   #cropper-modal.open { display:flex; }
   .cropper-title { color:#fff; font-size:1.1rem; font-weight:800; margin-bottom:16px; }
-  .cropper-container { position:relative; width:100%; max-width:360px; height:360px; overflow:hidden; border-radius:50%; border:3px solid var(--pink); background:#000; touch-action:none; }
-  .cropper-container.square { border-radius:16px; }
-  #cropper-img { position:absolute; transform-origin:center center; cursor:grab; user-select:none; -webkit-user-drag:none; }
+  .cropper-container { position:relative; width:100%; max-width:320px; height:320px; overflow:hidden; border-radius:50%; border:3px solid var(--pink); background:#000; touch-action:none; }
+  #cropper-img { position:absolute; transform-origin:top left; cursor:grab; user-select:none; -webkit-user-drag:none; }
   #cropper-img:active { cursor:grabbing; }
-  .cropper-controls { display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:20px; width:100%; max-width:360px; }
+  .cropper-controls { display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:20px; width:100%; max-width:320px; }
   .zoom-slider { width:100%; accent-color:var(--pink); }
   .cropper-label { color:rgba(255,255,255,0.7); font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; align-self:flex-start; }
   .cropper-btns { display:flex; gap:12px; width:100%; }
@@ -249,8 +248,10 @@
 
   /* CHAT SETTINGS SCREEN */
   #screen-chat-settings { background:var(--bg); overflow-y:auto; }
-  .chat-settings-header { background:var(--card); padding:16px 20px; display:flex; align-items:center; gap:14px; border-bottom:1px solid var(--border); box-shadow:var(--shadow-sm); flex-shrink:0; }
-  .chat-settings-header h2 { font-size:1.1rem; font-weight:800; color:var(--text); flex:1; }
+
+  /* Upload progress bar */
+  .upload-progress { width:100%; height:4px; background:var(--border); border-radius:2px; margin-top:8px; overflow:hidden; display:none; }
+  .upload-progress-bar { height:100%; background:linear-gradient(90deg,var(--pink),var(--pink-deep)); border-radius:2px; transition:width 0.3s; width:0%; }
 
   @media(min-width:480px){.auth-card,.modal-sheet{max-width:480px;margin:0 auto;}}
 </style>
@@ -274,14 +275,14 @@
 <div id="cropper-modal">
   <div class="cropper-title">Adjust Profile Photo</div>
   <div class="cropper-container" id="cropper-container">
-    <img id="cropper-img" src="" draggable="false">
+    <img id="cropper-img" src="" draggable="false" alt="">
   </div>
   <div class="cropper-controls">
     <div class="cropper-label">Zoom</div>
     <input type="range" class="zoom-slider" id="zoom-slider" min="1" max="4" step="0.01" value="1">
     <div class="cropper-btns">
-      <button class="cropper-cancel" onclick="closeCropper()">Cancel</button>
-      <button class="cropper-save" onclick="saveCrop()">Save Photo</button>
+      <button class="cropper-cancel" id="cropper-cancel-btn">Cancel</button>
+      <button class="cropper-save" id="cropper-save-btn">Save Photo</button>
     </div>
   </div>
 </div>
@@ -298,7 +299,7 @@
     <div class="field"><label>Full Name</label><input type="text" id="reg-name" placeholder="Enter your full name" autocomplete="name"></div>
     <div class="field"><label>Mobile Number</label><input type="tel" id="reg-phone" placeholder="+91 98765 43210" autocomplete="tel"></div>
     <div class="field"><label>Email Address</label><input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email"></div>
-    <button class="btn-primary" onclick="handleRegister()"><span class="material-icons-round">arrow_forward</span> Next</button>
+    <button class="btn-primary" id="reg-btn" onclick="handleRegister()"><span class="material-icons-round">arrow_forward</span> Next</button>
   </div>
 </div>
 
@@ -313,13 +314,13 @@
     <p>Let others know who you are</p>
     <div class="avatar-upload">
       <div class="avatar-ring" id="profile-avatar-ring">
-        <span class="material-icons-round avatar-placeholder" style="font-size:2.5rem;color:var(--pink-light);">photo_camera</span>
+        <span class="material-icons-round avatar-placeholder" id="profile-avatar-placeholder">photo_camera</span>
         <input type="file" accept="image/*" id="profile-pic-input" onchange="handleProfilePicSelect(this,'profile')">
       </div>
       <span>Tap to upload photo</span>
     </div>
     <div class="field"><label>Bio / About</label><textarea id="reg-bio" placeholder="Say something about yourself..."></textarea></div>
-    <button class="btn-primary" onclick="handleProfileSave()"><span class="material-icons-round">rocket_launch</span> Complete Setup</button>
+    <button class="btn-primary" id="profile-save-btn" onclick="handleProfileSave()"><span class="material-icons-round">rocket_launch</span> Complete Setup</button>
     <button class="btn-secondary" onclick="handleProfileSkip()">Skip for now</button>
   </div>
 </div>
@@ -356,7 +357,7 @@
 <div id="screen-chat" class="screen">
   <div class="chat-header">
     <button class="back-btn" onclick="backToHome()"><span class="material-icons-round">arrow_back</span></button>
-    <div class="chat-avatar" id="chat-header-avatar" style="width:40px;height:40px;"><span class="material-icons-round">person</span></div>
+    <div class="chat-avatar" id="chat-header-avatar" style="width:40px;height:40px;flex-shrink:0;"><span class="material-icons-round">person</span></div>
     <div class="chat-header-info">
       <div class="chat-header-name" id="chat-header-name">Contact</div>
       <div class="chat-header-status" id="chat-header-status">offline</div>
@@ -372,7 +373,7 @@
 
 <!-- SCREEN: CHAT SETTINGS -->
 <div id="screen-chat-settings" class="screen">
-  <div class="chat-settings-header" style="background:var(--card);padding:16px 20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border);box-shadow:var(--shadow-sm);">
+  <div style="background:var(--card);padding:16px 20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border);box-shadow:var(--shadow-sm);flex-shrink:0;">
     <button class="back-btn" onclick="showScreen('screen-home')"><span class="material-icons-round">arrow_back</span></button>
     <h2 style="font-size:1.1rem;font-weight:800;color:var(--text);flex:1;">Chat Settings</h2>
   </div>
@@ -425,11 +426,6 @@
           <div class="settings-item-text"><h4>Dark Mode</h4><p>Switch between light and dark</p></div>
           <label class="toggle"><input type="checkbox" id="dark-mode-toggle2" onchange="syncDarkMode(this.checked)"><span class="toggle-slider"></span></label>
         </div>
-        <div class="settings-item">
-          <div class="settings-item-icon"><span class="material-icons-round">format_size</span></div>
-          <div class="settings-item-text"><h4>Font Size</h4><p>Normal</p></div>
-          <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
-        </div>
       </div>
     </div>
     <div class="settings-section">
@@ -454,14 +450,14 @@
     </div>
     <div class="settings-profile">
       <div class="settings-avatar" id="settings-avatar" onclick="document.getElementById('settings-pic-input').click()">
-        <span class="material-icons-round" style="font-size:2.5rem;">person</span>
+        <span class="material-icons-round" style="font-size:2.5rem;" id="settings-avatar-icon">person</span>
         <input type="file" accept="image/*" id="settings-pic-input" style="display:none" onchange="handleProfilePicSelect(this,'settings')">
       </div>
       <div class="settings-name" id="settings-name-display">User</div>
       <div class="settings-phone" id="settings-phone-display">+91 XXXXX XXXXX</div>
     </div>
   </div>
-  <div style="padding:0 0 100px;">
+  <div style="padding:0 0 100px;overflow-y:auto;">
     <div class="settings-section">
       <div class="settings-section-title">Profile</div>
       <div class="settings-card">
@@ -530,9 +526,9 @@
           <div class="settings-item-text"><h4>Log Out</h4><p>Exit without deleting data</p></div>
           <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
         </div>
-        <div class="settings-item" onclick="deleteAccount()" style="border-bottom:none;">
+        <div class="settings-item" onclick="deleteAccount()">
           <div class="settings-item-icon" style="background:#FFEBEE;"><span class="material-icons-round" style="color:#E53935;">delete_forever</span></div>
-          <div class="settings-item-text"><h4 style="color:#E53935;">Delete Account</h4><p style="color:var(--text-muted);">Permanently removes all data</p></div>
+          <div class="settings-item-text"><h4 style="color:#E53935;">Delete Account</h4><p>Permanently removes all data</p></div>
           <span class="settings-item-arrow"><span class="material-icons-round">chevron_right</span></span>
         </div>
       </div>
@@ -588,7 +584,7 @@
     <div class="modal-subtitle">Lock chats with a secret PIN. The PIN is saved to your account.</div>
     <div class="field">
       <label>Current PIN (if changing)</label>
-      <input type="password" id="satellite-pin-current" placeholder="Enter current PIN (leave blank if new)" maxlength="4" inputmode="numeric">
+      <input type="password" id="satellite-pin-current" placeholder="Leave blank if setting new PIN" maxlength="4" inputmode="numeric">
     </div>
     <div class="field">
       <label>New 4-Digit PIN</label>
@@ -628,6 +624,7 @@
   </div>
 </div>
 
+
 <!-- Context Menu -->
 <div id="ctx-menu" class="ctx-menu" style="display:none;">
   <div class="ctx-item danger" onclick="deleteMessage()"><span class="material-icons-round">delete</span> Delete Message</div>
@@ -636,9 +633,13 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, get, push, onValue, update, remove, serverTimestamp, onDisconnect } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { getStorage, ref as sref, uploadString, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import {
+  getDatabase, ref, set, get, push, onValue, update, remove,
+  serverTimestamp, onDisconnect
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+
+/* ── FIREBASE CONFIG ── */
 const firebaseConfig = {
   apiKey: "AIzaSyCPpdYibTcnJitgEgiiDKpy6mwN3wj5TXg",
   authDomain: "id-chat-e0815.firebaseapp.com",
@@ -646,16 +647,75 @@ const firebaseConfig = {
   projectId: "id-chat-e0815",
   storageBucket: "id-chat-e0815.firebasestorage.app",
   messagingSenderId: "147304689530",
-  appId: "1:147304689530:web:21ea9d2ed21b4058a1f0c3",
-  measurementId: "G-E95YN84T74"
+  appId: "1:147304689530:web:21ea9d2ed21b4058a1f0c3"
 };
-
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const storage = getStorage(app);
+const db  = getDatabase(app);
 
-// ── STATE ──
-let currentUser = null;
+
+/* ── DB PATH HELPERS ──────────────────────────────────────────────────────────
+   STRUCTURE:
+   Users/
+     {name}_{phone}/               ← named by "Name_phone"
+       Profile/
+         name, phone, email, bio, photoURL, satellitePin
+       Chatting/
+         {otherPhone}/             ← connected contact
+           name, phone, photoURL, bio, lastMsg, lastMsgTime, unread
+   Messages/
+     {chatId}/                     ← sorted phone pair
+       {msgId}: { text, sender, receiver, ts, delivered, seen }
+   Presence/
+     {phone}: { online, lastSeen }
+   Typing/
+     {chatId}/{phone}: bool
+────────────────────────────────────────────────────────────────────────────── */
+
+function cleanPhone(p){ return p.replace(/\D/g,''); }
+
+function userKey(name, phone){ return `${name.replace(/\s+/g,'_')}_${cleanPhone(phone)}`; }
+function getChatId(a,b){ return [cleanPhone(a),cleanPhone(b)].sort().join('_'); }
+
+// DB refs
+function profileRef(name, phone){ return ref(db, `Users/${userKey(name,phone)}/Profile`); }
+function profileRefByKey(key){ return ref(db, `Users/${key}/Profile`); }
+function chattingRef(name, phone){ return ref(db, `Users/${userKey(name,phone)}/Chatting`); }
+function chattingContactRef(name, phone, otherPhone){ return ref(db, `Users/${userKey(name,phone)}/Chatting/${cleanPhone(otherPhone)}`); }
+function messagesRef(chatId){ return ref(db, `Messages/${chatId}`); }
+function presenceRef(phone){ return ref(db, `Presence/${cleanPhone(phone)}`); }
+function typingRef(chatId, phone){ return ref(db, `Typing/${chatId}/${cleanPhone(phone)}`); }
+async function convertToBase64(file){
+
+  return new Promise((resolve, reject)=>{
+
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onload = () => resolve(reader.result);
+
+    reader.onerror = error => reject(error);
+
+  });
+
+}
+
+
+// Find user key by phone (search Users node)
+async function findUserKeyByPhone(phone){
+  const cp = cleanPhone(phone);
+  const snap = await get(ref(db, 'Users'));
+  if(!snap.exists()) return null;
+  let found = null;
+  snap.forEach(child => {
+    const profile = child.val().Profile;
+    if(profile && cleanPhone(profile.phone||'') === cp){ found = child.key; }
+  });
+  return found;
+}
+
+/* ── STATE ── */
+let currentUser = null;   // { name, phone, email, bio, photoURL, satellitePin }
 let contacts = {};
 let activeChat = null;
 let messagesListener = null;
@@ -664,190 +724,489 @@ let typingTimeout = null;
 let selectedMsgKey = null;
 let pendingChatContact = null;
 let cropperCallback = null;
-let cropState = { scale:1, x:0, y:0, startX:0, startY:0, dragging:false, imgW:0, imgH:0 };
+let cropState = { scale:1, x:0, y:0, startX:0, startY:0, dragging:false, imgNW:0, imgNH:0 };
 
-// ── UTILS ──
-function cleanPhone(p){ return p.replace(/\D/g,''); }
-function getChatId(a,b){ return [cleanPhone(a),cleanPhone(b)].sort().join('_'); }
-function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
-function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+/* ── UTILS ── */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function openModal(id){ document.getElementById(id).classList.add('open'); }
 function formatTime(ts){ if(!ts)return ''; return new Date(ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
-function formatDate(ts){ if(!ts)return ''; const d=new Date(ts),today=new Date(),y=new Date(); y.setDate(y.getDate()-1); if(d.toDateString()===today.toDateString())return 'Today'; if(d.toDateString()===y.toDateString())return 'Yesterday'; return d.toLocaleDateString(); }
-function showInAppNotif(name,body,photoURL){ if(!document.getElementById('notif-toggle').checked)return; document.getElementById('notif-title').textContent=name; document.getElementById('notif-body').textContent=body; const av=document.getElementById('notif-avatar'); if(photoURL){ av.innerHTML=`<img src="${photoURL}" style="width:100%;height:100%;object-fit:cover;">`; } else { av.innerHTML=`<span class="material-icons-round">person</span>`; } document.getElementById('in-app-notif').classList.add('show'); setTimeout(()=>document.getElementById('in-app-notif').classList.remove('show'),3500); }
+function formatDate(ts){
+  if(!ts)return '';
+  const d=new Date(ts), today=new Date(), yest=new Date();
+  yest.setDate(yest.getDate()-1);
+  if(d.toDateString()===today.toDateString()) return 'Today';
+  if(d.toDateString()===yest.toDateString()) return 'Yesterday';
+  return d.toLocaleDateString();
+}
+function showInAppNotif(name,body,photoURL){
+  if(!document.getElementById('notif-toggle').checked) return;
+  document.getElementById('notif-title').textContent=name;
+  document.getElementById('notif-body').textContent=body;
+  const av=document.getElementById('notif-avatar');
+  av.innerHTML = photoURL
+    ? `<img src="${photoURL}" style="width:100%;height:100%;object-fit:cover;">`
+    : `<span class="material-icons-round">person</span>`;
+  const el=document.getElementById('in-app-notif');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3500);
+}
+function escapeHtml(t){ const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
 
-window.showScreen = showScreen;
-window.closeModal = closeModal;
+window.showScreen=showScreen;
+window.closeModal=closeModal;
 
-// ── DB STRUCTURE ──
-// users/{cp}/profile: {name, phone, email, bio, photoURL, satellitePin}
-// users/{cp}/chats/{otherCp}: {name, phone, photoURL, bio, lastMsg, lastMsgTime, unread}
-// messages/{chatId}/{msgId}: {text, sender, receiver, ts, delivered, seen}
-// presence/{cp}: {online, lastSeen}
-// typing/{chatId}/{cp}: boolean
-
-function userProfileRef(cp){ return ref(db,`users/${cp}/profile`); }
-function userChatsRef(cp){ return ref(db,`users/${cp}/chats`); }
-function userChatRef(cp,otherCp){ return ref(db,`users/${cp}/chats/${otherCp}`); }
-
-// ── INIT ──
+/* ── INIT ── */
 window.addEventListener('load', async()=>{
-  const saved=localStorage.getItem('idchat_user');
-  if(saved){ currentUser=JSON.parse(saved); await loadUserFromDB(); }
+  applyDarkMode();
+  const saved = localStorage.getItem('idchat_user');
+  if(saved){
+    currentUser = JSON.parse(saved);
+    await refreshUserFromDB();
+  }
   setTimeout(()=>{
     document.getElementById('loading-screen').classList.add('hide');
-    setTimeout(()=>{ if(currentUser){ showScreen('screen-home'); initHome(); } else { showScreen('screen-register'); } },600);
-  },2000);
-  applyDarkMode();
+    setTimeout(()=>{
+      if(currentUser){ showScreen('screen-home'); initHome(); }
+      else { showScreen('screen-register'); }
+    },600);
+  },1800);
 });
 
-async function loadUserFromDB(){
-  const snap=await get(userProfileRef(cleanPhone(currentUser.phone)));
-  if(snap.exists()){ currentUser={...currentUser,...snap.val()}; localStorage.setItem('idchat_user',JSON.stringify(currentUser)); }
-  updatePresence();
+async function refreshUserFromDB(){
+  if(!currentUser) return;
+  try {
+    const key = userKey(currentUser.name, currentUser.phone);
+    const snap = await get(profileRefByKey(key));
+    if(snap.exists()){
+      currentUser = { ...currentUser, ...snap.val() };
+      localStorage.setItem('idchat_user', JSON.stringify(currentUser));
+    }
+    updatePresence();
+  } catch(e){ console.warn('refreshUserFromDB:', e); }
 }
 
 function updatePresence(){
-  if(!currentUser)return;
-  const cp=cleanPhone(currentUser.phone);
-  const presRef=ref(db,`presence/${cp}`);
-  set(presRef,{online:true,lastSeen:Date.now()});
-  onDisconnect(presRef).set({online:false,lastSeen:serverTimestamp()});
+  if(!currentUser) return;
+  const pRef = presenceRef(currentUser.phone);
+  set(pRef, { online:true, lastSeen:Date.now() });
+  onDisconnect(pRef).set({ online:false, lastSeen:serverTimestamp() });
 }
 
-// ── REGISTER ──
+/* ── REGISTER ── */
 window.handleRegister = async function(){
-  const name=document.getElementById('reg-name').value.trim();
-  const phone=document.getElementById('reg-phone').value.trim();
-  const email=document.getElementById('reg-email').value.trim();
-  if(!name||!phone){ showToast('Please fill all required fields'); return; }
-  const cp=cleanPhone(phone);
-  if(cp.length<7){ showToast('Enter a valid mobile number'); return; }
-  const snap=await get(userProfileRef(cp));
-  if(snap.exists()){ currentUser=snap.val(); localStorage.setItem('idchat_user',JSON.stringify(currentUser)); showScreen('screen-home'); initHome(); showToast('Welcome back, '+currentUser.name+'!'); return; }
-  currentUser={name,phone,email,bio:'',photoURL:''};
-  localStorage.setItem('idchat_user',JSON.stringify(currentUser));
-  showScreen('screen-profile');
+  const name  = document.getElementById('reg-name').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  if(!name||!phone){ showToast('Please fill name and mobile number'); return; }
+  if(cleanPhone(phone).length < 7){ showToast('Enter a valid mobile number'); return; }
+
+  const btn = document.getElementById('reg-btn');
+  btn.disabled = true; btn.innerHTML = '<span class="material-icons-round">hourglass_top</span> Checking...';
+
+  try {
+    // Check if user already exists by phone
+    const existingKey = await findUserKeyByPhone(phone);
+    if(existingKey){
+      const snap = await get(profileRefByKey(existingKey));
+      if(snap.exists()){
+        currentUser = snap.val();
+        localStorage.setItem('idchat_user', JSON.stringify(currentUser));
+        showScreen('screen-home'); initHome();
+        showToast('Welcome back, '+currentUser.name+'!');
+        return;
+      }
+    }
+    currentUser = { name, phone, email, bio:'', photoURL:'' };
+    localStorage.setItem('idchat_user', JSON.stringify(currentUser));
+    showScreen('screen-profile');
+  } catch(e){
+    showToast('Error: '+e.message);
+  } finally {
+    btn.disabled=false; btn.innerHTML='<span class="material-icons-round">arrow_forward</span> Next';
+  }
 };
 
-// ── PROFILE PIC CROPPER ──
+/* ── PROFILE PIC — CROPPER ── */
 window.handleProfilePicSelect = function(input, context){
-  if(!input.files||!input.files[0])return;
-  const file=input.files[0];
-  const reader=new FileReader();
-  reader.onload=e=>{ openCropper(e.target.result, context); };
-  reader.readAsDataURL(file);
-  input.value=''; // reset so same file can be selected again
+  if(!input.files||!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => openCropper(e.target.result, context);
+  reader.readAsDataURL(input.files[0]);
+  input.value = '';
 };
 
 function openCropper(src, context){
-  const modal=document.getElementById('cropper-modal');
-  const img=document.getElementById('cropper-img');
-  const slider=document.getElementById('zoom-slider');
-  img.src=src;
-  slider.value=1;
-  cropState={scale:1,x:0,y:0,startX:0,startY:0,dragging:false,imgW:0,imgH:0};
-  modal.classList.add('open');
-  img.onload=()=>{ cropState.imgW=img.naturalWidth; cropState.imgH=img.naturalHeight; applyCropTransform(); };
-  cropperCallback=context;
+  const img = document.getElementById('cropper-img');
+  img.src = src;
+  document.getElementById('zoom-slider').value = 1;
+  cropState = { scale:1, x:0, y:0, startX:0, startY:0, dragging:false, imgNW:0, imgNH:0 };
+  document.getElementById('cropper-modal').classList.add('open');
+  cropperCallback = context;
+  img.onload = () => {
+    cropState.imgNW = img.naturalWidth;
+    cropState.imgNH = img.naturalHeight;
+    applyCropTransform();
+  };
 }
 
-window.closeCropper=function(){ document.getElementById('cropper-modal').classList.remove('open'); };
+window.closeCropper = function(){ document.getElementById('cropper-modal').classList.remove('open'); };
 
 function applyCropTransform(){
-  const img=document.getElementById('cropper-img');
-  const container=document.getElementById('cropper-container');
-  const cw=container.offsetWidth, ch=container.offsetHeight;
-  const scale=cropState.scale;
-  const iw=cropState.imgW, ih=cropState.imgH;
-  const fit=Math.max(cw/iw,ch/ih);
-  const dw=iw*fit*scale, dh=ih*fit*scale;
-  const maxX=(dw-cw)/2, maxY=(dh-ch)/2;
-  cropState.x=Math.max(-maxX,Math.min(maxX,cropState.x));
-  cropState.y=Math.max(-maxY,Math.min(maxY,cropState.y));
-  img.style.width=dw+'px'; img.style.height=dh+'px';
-  img.style.left=((cw-dw)/2+cropState.x)+'px';
-  img.style.top=((ch-dh)/2+cropState.y)+'px';
+  const img = document.getElementById('cropper-img');
+  const c   = document.getElementById('cropper-container');
+  const cw  = c.offsetWidth, ch = c.offsetHeight;
+  const s   = cropState.scale;
+  const fit = Math.max(cw/cropState.imgNW, ch/cropState.imgNH);
+  const dw  = cropState.imgNW * fit * s;
+  const dh  = cropState.imgNH * fit * s;
+  const maxX = (dw-cw)/2, maxY = (dh-ch)/2;
+  cropState.x = Math.max(-maxX, Math.min(maxX, cropState.x));
+  cropState.y = Math.max(-maxY, Math.min(maxY, cropState.y));
+  img.style.width  = dw+'px';
+  img.style.height = dh+'px';
+  img.style.left   = ((cw-dw)/2 + cropState.x)+'px';
+  img.style.top    = ((ch-dh)/2 + cropState.y)+'px';
 }
 
-document.getElementById('zoom-slider').addEventListener('input',function(){ cropState.scale=parseFloat(this.value); applyCropTransform(); });
+document.getElementById('zoom-slider').addEventListener('input', function(){
+  cropState.scale = parseFloat(this.value); applyCropTransform();
+});
 
-// Drag handling (touch + mouse)
-const cropImg=document.getElementById('cropper-img');
-cropImg.addEventListener('mousedown',e=>{ cropState.dragging=true; cropState.startX=e.clientX-cropState.x; cropState.startY=e.clientY-cropState.y; e.preventDefault(); });
-document.addEventListener('mousemove',e=>{ if(!cropState.dragging)return; cropState.x=e.clientX-cropState.startX; cropState.y=e.clientY-cropState.startY; applyCropTransform(); });
-document.addEventListener('mouseup',()=>{ cropState.dragging=false; });
-cropImg.addEventListener('touchstart',e=>{ const t=e.touches[0]; cropState.dragging=true; cropState.startX=t.clientX-cropState.x; cropState.startY=t.clientY-cropState.y; e.preventDefault(); },{passive:false});
-document.addEventListener('touchmove',e=>{ if(!cropState.dragging)return; const t=e.touches[0]; cropState.x=t.clientX-cropState.startX; cropState.y=t.clientY-cropState.startY; applyCropTransform(); e.preventDefault(); },{passive:false});
-document.addEventListener('touchend',()=>{ cropState.dragging=false; });
+// Drag: mouse
+const cropImg = document.getElementById('cropper-img');
+cropImg.addEventListener('mousedown', e=>{
+  cropState.dragging=true; cropState.startX=e.clientX-cropState.x; cropState.startY=e.clientY-cropState.y; e.preventDefault();
+});
+document.addEventListener('mousemove', e=>{
+  if(!cropState.dragging) return;
+  cropState.x=e.clientX-cropState.startX; cropState.y=e.clientY-cropState.startY; applyCropTransform();
+});
+document.addEventListener('mouseup', ()=>{ cropState.dragging=false; });
+// Drag: touch
+cropImg.addEventListener('touchstart', e=>{
+  const t=e.touches[0]; cropState.dragging=true;
+  cropState.startX=t.clientX-cropState.x; cropState.startY=t.clientY-cropState.y; e.preventDefault();
+},{passive:false});
+document.addEventListener('touchmove', e=>{
+  if(!cropState.dragging) return;
+  const t=e.touches[0]; cropState.x=t.clientX-cropState.startX; cropState.y=t.clientY-cropState.startY;
+  applyCropTransform(); e.preventDefault();
+},{passive:false});
+document.addEventListener('touchend', ()=>{ cropState.dragging=false; });
 
-window.saveCrop = async function(){
-  const container=document.getElementById('cropper-container');
-  const img=document.getElementById('cropper-img');
-  const cw=container.offsetWidth, ch=container.offsetHeight;
-  const canvas=document.createElement('canvas');
-  canvas.width=300; canvas.height=300;
-  const ctx=canvas.getContext('2d');
-  ctx.beginPath(); ctx.arc(150,150,150,0,Math.PI*2); ctx.clip();
-  const rect=img.getBoundingClientRect();
-  const conRect=container.getBoundingClientRect();
-  const sx=conRect.left-rect.left, sy=conRect.top-rect.top;
-  const scaleRatio=img.naturalWidth/rect.width;
-  ctx.drawImage(img, sx*scaleRatio, sy*scaleRatio, cw*scaleRatio, ch*scaleRatio, 0,0,300,300);
-  const dataURL=canvas.toDataURL('image/jpeg',0.85);
-  closeCropper();
-  showToast('Uploading photo...');
-  try {
-    const url=await uploadImageDataURL(dataURL,`avatars/${cleanPhone(currentUser.phone)}`);
-    currentUser.photoURL=url;
-    await saveUserProfile();
-    updateHeaderUI(); updateSettingsUI();
-    // update profile pic preview in profile setup screen too
-    const ring=document.getElementById('profile-avatar-ring');
-    if(ring){ ring.innerHTML=`<img src="${url}"><input type="file" accept="image/*" id="profile-pic-input" onchange="handleProfilePicSelect(this,'profile')">`; }
-    showToast('Profile picture updated!');
-  } catch(e){ console.error(e); showToast('Upload failed: '+e.message); }
-};
+document.getElementById('cropper-cancel-btn').addEventListener('click', ()=>window.closeCropper());
+document.getElementById('cropper-save-btn').addEventListener('click', ()=>saveCrop());
 
-async function uploadImageDataURL(dataURL, path){
-  const r=sref(storage,path);
-  // uploadString with 'data_url' format
-  await uploadString(r, dataURL, 'data_url');
-  return getDownloadURL(r);
+async function saveCrop(){
+
+  if(!currentUser){
+
+    showToast('Please register first');
+
+    return;
+
+  }
+
+  const container =
+  document.getElementById('cropper-container');
+
+  const img =
+  document.getElementById('cropper-img');
+
+  const canvas =
+  document.createElement('canvas');
+
+  canvas.width = 300;
+  canvas.height = 300;
+
+  const ctx = canvas.getContext('2d');
+
+  ctx.beginPath();
+
+  ctx.arc(150,150,150,0,Math.PI*2);
+
+  ctx.closePath();
+
+  ctx.clip();
+
+  const imgRect =
+  img.getBoundingClientRect();
+
+  const containerRect =
+  container.getBoundingClientRect();
+
+  const scaleX =
+  img.naturalWidth / imgRect.width;
+
+  const scaleY =
+  img.naturalHeight / imgRect.height;
+
+  const sx =
+  (containerRect.left - imgRect.left) * scaleX;
+
+  const sy =
+  (containerRect.top - imgRect.top) * scaleY;
+
+  const sw =
+  containerRect.width * scaleX;
+
+  const sh =
+  containerRect.height * scaleY;
+
+  ctx.drawImage(
+
+    img,
+
+    sx,
+    sy,
+    sw,
+    sh,
+
+    0,
+    0,
+    300,
+    300
+
+  );
+
+  const base64 =
+  canvas.toDataURL("image/jpeg",0.8);
+
+  try{
+
+    showToast("Uploading photo...");
+
+    currentUser.photoURL = base64;
+
+    localStorage.setItem(
+
+      "idchat_user",
+
+      JSON.stringify(currentUser)
+
+    );
+
+    await update(
+
+      profileRef(
+        currentUser.name,
+        currentUser.phone
+      ),
+
+      {
+        photoURL: base64
+      }
+
+    );
+
+    updateProfileUI();
+
+    closeCropper();
+
+    showToast("Profile updated!");
+
+  }
+
+  catch(err){
+
+    console.log(err);
+
+    showToast("Upload failed");
+
+  }
+
 }
 
-window.handleProfilePicPreview = window.handleProfilePicSelect; // alias
+function updateProfileUI(){
 
-// ── PROFILE ──
+  if(!currentUser) return;
+
+  /* HOME AVATAR */
+
+  const homeAvatar =
+  document.getElementById("home-avatar");
+
+  if(homeAvatar){
+
+    homeAvatar.innerHTML =
+    currentUser.photoURL
+
+    ?
+
+    `
+
+      <img
+        src="${currentUser.photoURL}"
+        style="
+          width:100%;
+          height:100%;
+          object-fit:cover;
+          border-radius:50%;
+        "
+      >
+
+    `
+
+    :
+
+    `
+
+      <span class="material-icons-round">
+        person
+      </span>
+
+    `;
+
+  }
+
+
+  /* SETTINGS AVATAR */
+
+  const settingsAvatar =
+  document.getElementById("settings-avatar");
+
+  if(settingsAvatar){
+
+    settingsAvatar.innerHTML =
+    currentUser.photoURL
+
+    ?
+
+    `
+
+      <img
+        src="${currentUser.photoURL}"
+        style="
+          width:100%;
+          height:100%;
+          object-fit:cover;
+          border-radius:50%;
+        "
+      >
+
+    `
+
+    :
+
+    `
+
+      <span
+        class="material-icons-round"
+        style="font-size:2.5rem;"
+      >
+        person
+      </span>
+
+    `;
+
+  }
+
+
+  /* PROFILE SETUP */
+
+  const profileRing =
+  document.getElementById("profile-avatar-ring");
+
+  if(profileRing && currentUser.photoURL){
+
+    profileRing.innerHTML = `
+
+      <img
+        src="${currentUser.photoURL}"
+        style="
+          width:100%;
+          height:100%;
+          object-fit:cover;
+          border-radius:50%;
+        "
+      >
+
+      <input
+        type="file"
+        accept="image/*"
+        id="profile-pic-input"
+        onchange="handleProfilePicSelect(this,'profile')"
+      >
+
+    `;
+
+  }
+
+
+  /* SETTINGS TEXT */
+
+  const nameDisplay =
+  document.getElementById("settings-name-display");
+
+  if(nameDisplay){
+
+    nameDisplay.textContent =
+    currentUser.name || "User";
+
+  }
+
+  const phoneDisplay =
+  document.getElementById("settings-phone-display");
+
+  if(phoneDisplay){
+
+    phoneDisplay.textContent =
+    currentUser.phone || "";
+
+  }
+
+}
+
+/* ── PROFILE SETUP ── */
 window.handleProfileSave = async function(){
-  const bio=document.getElementById('reg-bio').value.trim();
-  currentUser.bio=bio;
-  await saveUserProfile();
-  showScreen('screen-home'); initHome(); showToast('Welcome, '+currentUser.name+'! 🎉');
+  const bio = document.getElementById('reg-bio').value.trim();
+  currentUser.bio = bio;
+  const btn = document.getElementById('profile-save-btn');
+  btn.disabled=true; btn.innerHTML='<span class="material-icons-round">hourglass_top</span> Saving...';
+  try {
+    await saveUserProfile();
+    showScreen('screen-home'); initHome();
+    showToast('Welcome, '+currentUser.name+'! 🎉');
+  } catch(e){ showToast('Error: '+e.message); }
+  finally { btn.disabled=false; btn.innerHTML='<span class="material-icons-round">rocket_launch</span> Complete Setup'; }
 };
 
 window.handleProfileSkip = async function(){
-  await saveUserProfile();
-  showScreen('screen-home'); initHome(); showToast('Welcome, '+currentUser.name+'!');
+  try {
+    await saveUserProfile();
+    showScreen('screen-home'); initHome();
+    showToast('Welcome, '+currentUser.name+'!');
+  } catch(e){ showToast('Error: '+e.message); }
 };
 
+/* ── SAVE USER PROFILE ─────────────────────────────────────────────────────
+   Writes to:  Users/{Name_phone}/Profile/{ name, phone, email, bio, photoURL, satellitePin? }
+──────────────────────────────────────────────────────────────────────────── */
 async function saveUserProfile(){
-  const cp=cleanPhone(currentUser.phone);
-  const profileData={
-    name:currentUser.name||'',
-    phone:currentUser.phone||'',
-    email:currentUser.email||'',
-    bio:currentUser.bio||'',
-    photoURL:currentUser.photoURL||''
+  const profileData = {
+    name:      currentUser.name      || '',
+    phone:     currentUser.phone     || '',
+    email:     currentUser.email     || '',
+    bio:       currentUser.bio       || '',
+    photoURL:  currentUser.photoURL  || ''
   };
-  if(currentUser.satellitePin) profileData.satellitePin=currentUser.satellitePin;
-  await set(userProfileRef(cp), profileData);
-  localStorage.setItem('idchat_user',JSON.stringify(currentUser));
+  if(currentUser.satellitePin) profileData.satellitePin = currentUser.satellitePin;
+
+  await set(profileRef(currentUser.name, currentUser.phone), profileData);
+  localStorage.setItem('idchat_user', JSON.stringify(currentUser));
   updatePresence();
 }
 
-// ── HOME ──
+/* ── HOME ── */
 function initHome(){
   updateHeaderUI();
   updateSettingsUI();
@@ -855,54 +1214,79 @@ function initHome(){
 }
 
 function updateHeaderUI(){
-  if(!currentUser)return;
-  const ha=document.getElementById('home-avatar');
-  if(currentUser.photoURL){ ha.innerHTML=`<img src="${currentUser.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`; }
-  else { ha.innerHTML=`<span class="material-icons-round">${currentUser.name?'person':'person'}</span>`; }
+  if(!currentUser) return;
+  const ha = document.getElementById('home-avatar');
+  if(currentUser.photoURL){
+    ha.innerHTML = `<img src="${currentUser.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  } else {
+    ha.innerHTML = `<span class="material-icons-round">person</span>`;
+  }
 }
 
 function updateSettingsUI(){
-  if(!currentUser)return;
-  document.getElementById('settings-name-display').textContent=currentUser.name||'User';
-  document.getElementById('settings-phone-display').textContent=currentUser.phone||'';
-  document.getElementById('s-name-preview').textContent=currentUser.name||'';
-  document.getElementById('s-phone-preview').textContent=currentUser.phone||'';
-  document.getElementById('s-email-preview').textContent=currentUser.email||'';
-  document.getElementById('s-bio-preview').textContent=currentUser.bio||'No bio set';
-  const sa=document.getElementById('settings-avatar');
-  if(currentUser.photoURL){ sa.innerHTML=`<img src="${currentUser.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"><input type="file" accept="image/*" id="settings-pic-input" style="display:none" onchange="handleProfilePicSelect(this,'settings')">`; }
-  else { sa.innerHTML=`<span class="material-icons-round" style="font-size:2.5rem;">person</span><input type="file" accept="image/*" id="settings-pic-input" style="display:none" onchange="handleProfilePicSelect(this,'settings')">`; }
-  const dm=localStorage.getItem('idchat_dark')==='true';
-  document.getElementById('dark-mode-toggle').checked=dm;
-  if(document.getElementById('dark-mode-toggle2')) document.getElementById('dark-mode-toggle2').checked=dm;
+  if(!currentUser) return;
+  document.getElementById('settings-name-display').textContent = currentUser.name  || 'User';
+  document.getElementById('settings-phone-display').textContent= currentUser.phone || '';
+  document.getElementById('s-name-preview').textContent  = currentUser.name  || '';
+  document.getElementById('s-phone-preview').textContent = currentUser.phone || '';
+  document.getElementById('s-email-preview').textContent = currentUser.email || '';
+  document.getElementById('s-bio-preview').textContent   = currentUser.bio   || 'No bio set';
+
+  const sa = document.getElementById('settings-avatar');
+  const icon = document.getElementById('settings-avatar-icon');
+  // Remove old img
+  const oldImg = sa.querySelector('img');
+  if(oldImg) oldImg.remove();
+
+  if(currentUser.photoURL){
+    if(icon) icon.style.display='none';
+    const img = document.createElement('img');
+    img.src = currentUser.photoURL;
+    img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%;';
+    sa.insertBefore(img, sa.firstChild);
+  } else {
+    if(icon) icon.style.display='';
+  }
+
+  const dm = localStorage.getItem('idchat_dark')==='true';
+  document.getElementById('dark-mode-toggle').checked = dm;
+  const dm2 = document.getElementById('dark-mode-toggle2');
+  if(dm2) dm2.checked = dm;
 }
 
+/* ── CONTACTS / CHAT LIST ─────────────────────────────────────────────────
+   Reads from: Users/{Name_phone}/Chatting/
+──────────────────────────────────────────────────────────────────────────── */
 function loadContacts(){
-  if(!currentUser)return;
-  const cp=cleanPhone(currentUser.phone);
-  if(contactsListener) contactsListener();
-  contactsListener=onValue(ref(db,`users/${cp}/chats`), snap=>{
-    contacts={};
-    const cl=document.getElementById('chat-list');
+  if(!currentUser) return;
+  if(contactsListener){ contactsListener(); contactsListener=null; }
+
+  const chattRef = chattingRef(currentUser.name, currentUser.phone);
+  contactsListener = onValue(chattRef, snap=>{
+    contacts = {};
+    const cl = document.getElementById('chat-list');
     cl.innerHTML='';
-    if(!snap.exists()){ cl.innerHTML=`<div class="empty-state"><span class="material-icons-round empty-icon" style="font-size:4rem;">chat_bubble_outline</span><h3>No chats yet</h3><p>Tap + to add contacts and start chatting</p></div>`; return; }
-    const data=snap.val();
-    const list=Object.values(data);
+    if(!snap.exists()){
+      cl.innerHTML=`<div class="empty-state"><span class="material-icons-round empty-icon" style="font-size:4rem;">chat_bubble_outline</span><h3>No chats yet</h3><p>Tap + to add contacts and start chatting</p></div>`;
+      return;
+    }
+    const data = snap.val();
+    const list = Object.values(data);
     list.sort((a,b)=>(b.lastMsgTime||0)-(a.lastMsgTime||0));
     list.forEach(c=>{ contacts[cleanPhone(c.phone)]=c; renderChatItem(c); });
   });
 }
 
 function renderChatItem(contact){
-  const cp2=cleanPhone(contact.phone);
-  const isSat=!!currentUser.satellitePin&&localStorage.getItem(`satellite_${cp2}`)!=null;
-  const div=document.createElement('div');
+  const cp2 = cleanPhone(contact.phone);
+  const isSat = !!currentUser.satellitePin && localStorage.getItem(`satellite_${cp2}`)!=null;
+  const div = document.createElement('div');
   div.className='chat-item';
   div.id=`chat-item-${cp2}`;
-  const initials=contact.name?contact.name[0].toUpperCase():'?';
+  const initials = contact.name?contact.name[0].toUpperCase():'?';
   div.innerHTML=`
     <div class="chat-avatar" id="avatar-${cp2}">
-      ${contact.photoURL?`<img src="${contact.photoURL}">`:`<span>${initials}</span>`}
+      ${contact.photoURL?`<img src="${contact.photoURL}" style="width:100%;height:100%;object-fit:cover;">`:`<span>${initials}</span>`}
       <div class="online-dot" id="dot-${cp2}" style="display:none;"></div>
     </div>
     <div class="chat-info">
@@ -917,20 +1301,24 @@ function renderChatItem(contact){
     </div>
     ${contact.unread>0?`<div class="unread-badge">${contact.unread}</div>`:''}
   `;
+
   if(isSat){
     let pressTimer;
     div.addEventListener('touchstart',()=>{ pressTimer=setTimeout(()=>{ pendingChatContact=contact; openSatellitePinModal(); },600); });
-    div.addEventListener('touchend',()=>clearTimeout(pressTimer));
+    div.addEventListener('touchend', ()=>clearTimeout(pressTimer));
     div.addEventListener('mousedown',()=>{ pressTimer=setTimeout(()=>{ pendingChatContact=contact; openSatellitePinModal(); },600); });
     div.addEventListener('mouseup',()=>clearTimeout(pressTimer));
-    div.addEventListener('click',()=>{ showToast('Long press to open satellite chat'); });
+    div.addEventListener('click',()=>showToast('Long press to open satellite chat'));
   } else {
     div.addEventListener('click',()=>openChat(contact));
   }
+
   document.getElementById('chat-list').appendChild(div);
-  onValue(ref(db,`presence/${cp2}`),snap=>{
+
+  // Presence dot
+  onValue(presenceRef(cp2), snap=>{
     const dot=document.getElementById(`dot-${cp2}`);
-    if(dot){ dot.style.display=(snap.exists()&&snap.val().online)?'block':'none'; }
+    if(dot) dot.style.display=(snap.exists()&&snap.val().online)?'block':'none';
   });
 }
 
@@ -941,14 +1329,21 @@ window.openAddContact = function(){
 };
 
 window.searchContact = async function(){
-  const phone=document.getElementById('search-phone').value.trim();
+  const phone = document.getElementById('search-phone').value.trim();
   if(!phone){ showToast('Enter a mobile number'); return; }
-  const cp=cleanPhone(phone);
-  const snap=await get(userProfileRef(cp));
-  const res=document.getElementById('contact-search-result');
-  if(!snap.exists()){ res.style.display='block'; res.innerHTML=`<p style="color:var(--pink);font-weight:700;text-align:center;padding:16px;">No user found with this number</p>`; return; }
-  const u=snap.val();
-  const initials=u.name?u.name[0].toUpperCase():'?';
+  const foundKey = await findUserKeyByPhone(phone);
+  const res = document.getElementById('contact-search-result');
+  if(!foundKey){
+    res.style.display='block';
+    res.innerHTML=`<p style="color:var(--pink);font-weight:700;text-align:center;padding:16px;">No user found with this number</p>`;
+    return;
+  }
+  const snap = await get(profileRefByKey(foundKey));
+  if(!snap.exists()){ res.style.display='block'; res.innerHTML=`<p style="color:var(--pink);font-weight:700;text-align:center;padding:16px;">No user found</p>`; return; }
+  const u = snap.val();
+  const cp = cleanPhone(u.phone);
+  if(cp === cleanPhone(currentUser.phone)){ res.style.display='block'; res.innerHTML=`<p style="color:var(--pink);font-weight:700;text-align:center;padding:16px;">That's you!</p>`; return; }
+  const initials = u.name?u.name[0].toUpperCase():'?';
   res.style.display='block';
   res.innerHTML=`
     <div class="contact-result">
@@ -961,26 +1356,34 @@ window.searchContact = async function(){
 };
 
 window.addContact = async function(cp){
-  const snap=await get(userProfileRef(cp));
-  if(!snap.exists())return;
-  const u=snap.val();
-  const mycp=cleanPhone(currentUser.phone);
-  const contactData={name:u.name,phone:u.phone,photoURL:u.photoURL||'',bio:u.bio||'',lastMsg:'',lastMsgTime:0,unread:0};
-  await set(userChatRef(mycp,cp), contactData);
+  const foundKey = await findUserKeyByPhone(cp);
+  if(!foundKey){ showToast('User not found'); return; }
+  const snap = await get(profileRefByKey(foundKey));
+  if(!snap.exists()) return;
+  const u = snap.val();
+  // Write to Users/{myName_myPhone}/Chatting/{otherPhone}
+  const contactData = {
+    name:u.name, phone:u.phone, photoURL:u.photoURL||'',
+    bio:u.bio||'', lastMsg:'', lastMsgTime:0, unread:0
+  };
+  await set(chattingContactRef(currentUser.name, currentUser.phone, u.phone), contactData);
   closeModal('modal-add-contact');
   showToast(u.name+' added!');
 };
 
-// ── CHAT ──
+/* ── CHAT ── */
 window.openChat = function(contact){
-  activeChat=contact;
-  document.getElementById('chat-header-name').textContent=contact.name;
-  document.getElementById('chat-options-name').textContent=contact.name;
-  const ha=document.getElementById('chat-header-avatar');
-  if(contact.photoURL){ ha.innerHTML=`<img src="${contact.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`; }
-  else { ha.innerHTML=`<span class="material-icons-round">person</span>`; }
-  const isSat=localStorage.getItem(`satellite_${cleanPhone(contact.phone)}`)!=null;
-  const st=document.getElementById('satellite-chat-toggle');
+  activeChat = contact;
+  document.getElementById('chat-header-name').textContent = contact.name;
+  document.getElementById('chat-options-name').textContent = contact.name;
+  const ha = document.getElementById('chat-header-avatar');
+  if(contact.photoURL){
+    ha.innerHTML=`<img src="${contact.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  } else {
+    ha.innerHTML=`<span class="material-icons-round">person</span>`;
+  }
+  const isSat = localStorage.getItem(`satellite_${cleanPhone(contact.phone)}`)!=null;
+  const st = document.getElementById('satellite-chat-toggle');
   if(st){ st.checked=isSat; }
   document.getElementById('satellite-chat-status').textContent=isSat?'Enabled for this chat':'Enable for this chat';
   loadMessages();
@@ -990,60 +1393,95 @@ window.openChat = function(contact){
 
 window.backToHome = function(){
   if(messagesListener){ messagesListener(); messagesListener=null; }
-  const mycp=cleanPhone(currentUser.phone);
-  if(activeChat){ set(ref(db,`typing/${getChatId(currentUser.phone,activeChat.phone)}/${mycp}`),false); }
+  if(activeChat){
+    const chatId = getChatId(currentUser.phone, activeChat.phone);
+    set(typingRef(chatId, currentUser.phone), false);
+  }
   activeChat=null;
   showScreen('screen-home');
 };
 
+/* ── MESSAGES ─────────────────────────────────────────────────────────────
+   Stored at: Messages/{chatId}/{msgId}
+──────────────────────────────────────────────────────────────────────────── */
 function loadMessages(){
-  if(messagesListener) messagesListener();
-  const chatId=getChatId(currentUser.phone,activeChat.phone);
-  const msgsArea=document.getElementById('messages-area');
+  if(messagesListener){ messagesListener(); messagesListener=null; }
+  const chatId = getChatId(currentUser.phone, activeChat.phone);
+  const msgsArea = document.getElementById('messages-area');
   msgsArea.innerHTML='';
   let lastDate='';
-  messagesListener=onValue(ref(db,`messages/${chatId}`), snap=>{
+
+  messagesListener = onValue(messagesRef(chatId), snap=>{
     msgsArea.innerHTML=''; lastDate='';
-    if(!snap.exists()){ msgsArea.innerHTML=`<div style="text-align:center;padding:40px 20px;"><span class="material-icons-round" style="font-size:3rem;color:var(--pink-light);">waving_hand</span><p style="color:var(--text-muted);font-weight:600;margin-top:8px;">Say hello!</p></div>`; return; }
-    snap.forEach(child=>{ const msg={...child.val(),key:child.key}; const d=formatDate(msg.ts); if(d!==lastDate){ const dv=document.createElement('div'); dv.className='date-divider'; dv.innerHTML=`<span>${d}</span>`; msgsArea.appendChild(dv); lastDate=d; } renderMessage(msg); });
+    if(!snap.exists()){
+      msgsArea.innerHTML=`<div style="text-align:center;padding:40px 20px;"><span class="material-icons-round" style="font-size:3rem;color:var(--pink-light);">waving_hand</span><p style="color:var(--text-muted);font-weight:600;margin-top:8px;">Say hello!</p></div>`;
+      return;
+    }
+    snap.forEach(child=>{
+      const msg={...child.val(), key:child.key};
+      const d=formatDate(msg.ts);
+      if(d!==lastDate){
+        const dv=document.createElement('div'); dv.className='date-divider';
+        dv.innerHTML=`<span>${d}</span>`; msgsArea.appendChild(dv); lastDate=d;
+      }
+      renderMessage(msg);
+    });
     msgsArea.scrollTop=msgsArea.scrollHeight;
   });
-  onValue(ref(db,`typing/${chatId}/${cleanPhone(activeChat.phone)}`), snap=>{
+
+  // Typing indicator
+  onValue(typingRef(chatId, activeChat.phone), snap=>{
     const status=document.getElementById('chat-header-status');
-    if(snap.val()===true){ status.textContent='typing...'; status.className='chat-header-status online'; } else { checkPresence(); }
+    if(snap.val()===true){ status.textContent='typing...'; status.className='chat-header-status online'; }
+    else { updatePresenceStatus(); }
   });
-  onValue(ref(db,`presence/${cleanPhone(activeChat.phone)}`), snap=>{
-    const status=document.getElementById('chat-header-status');
-    if(status.textContent==='typing...')return;
-    if(snap.exists()&&snap.val().online){ status.textContent='Online'; status.className='chat-header-status online'; }
-    else if(snap.exists()&&snap.val().lastSeen){ status.textContent='Last seen '+formatTime(snap.val().lastSeen); status.className='chat-header-status'; }
-    else { status.textContent='Offline'; status.className='chat-header-status'; }
+
+  // Presence
+  onValue(presenceRef(activeChat.phone), snap=>{
+    updatePresenceStatus(snap);
   });
 }
 
-function checkPresence(){}
+function updatePresenceStatus(snap){
+  const status=document.getElementById('chat-header-status');
+  if(!status||status.textContent==='typing...') return;
+  if(snap&&snap.exists()&&snap.val().online){ status.textContent='Online'; status.className='chat-header-status online'; }
+  else if(snap&&snap.exists()&&snap.val().lastSeen){ status.textContent='Last seen '+formatTime(snap.val().lastSeen); status.className='chat-header-status'; }
+  else { status.textContent='Offline'; status.className='chat-header-status'; }
+}
 
 function renderMessage(msg){
   const msgsArea=document.getElementById('messages-area');
-  const isSent=cleanPhone(msg.sender)===cleanPhone(currentUser.phone);
+  const isSent = cleanPhone(msg.sender)===cleanPhone(currentUser.phone);
   const row=document.createElement('div');
   row.className=`msg-row ${isSent?'sent':'recv'}`;
   row.dataset.key=msg.key;
   let ticks='';
-  if(isSent){ ticks=msg.seen?`<span class="tick seen"><span class="material-icons-round">done_all</span></span>`:msg.delivered?`<span class="tick"><span class="material-icons-round">done_all</span></span>`:`<span class="tick"><span class="material-icons-round">done</span></span>`; }
+  if(isSent){
+    ticks = msg.seen
+      ? `<span class="tick seen"><span class="material-icons-round">done_all</span></span>`
+      : msg.delivered
+        ? `<span class="tick"><span class="material-icons-round">done_all</span></span>`
+        : `<span class="tick"><span class="material-icons-round">done</span></span>`;
+  }
   row.innerHTML=`<div class="msg-bubble">${escapeHtml(msg.text)}<div class="msg-meta"><span>${formatTime(msg.ts)}</span>${ticks}</div></div>`;
-  row.addEventListener('contextmenu',e=>{ e.preventDefault(); if(isSent){ selectedMsgKey=msg.key; showCtxMenu(e.clientX,e.clientY); } });
-  row.addEventListener('touchstart',function(e){ if(!isSent)return; let t=setTimeout(()=>{ selectedMsgKey=msg.key; showCtxMenu(e.touches[0].clientX,e.touches[0].clientY); },600); row.addEventListener('touchend',()=>clearTimeout(t),{once:true}); });
+  row.addEventListener('contextmenu', e=>{ e.preventDefault(); if(isSent){ selectedMsgKey=msg.key; showCtxMenu(e.clientX,e.clientY); } });
+  row.addEventListener('touchstart', function(e){ if(!isSent)return; let t=setTimeout(()=>{ selectedMsgKey=msg.key; showCtxMenu(e.touches[0].clientX,e.touches[0].clientY); },600); row.addEventListener('touchend',()=>clearTimeout(t),{once:true}); });
   msgsArea.appendChild(row);
 }
 
-function escapeHtml(t){ const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
-
-function showCtxMenu(x,y){ const m=document.getElementById('ctx-menu'); m.style.display='block'; m.style.left=Math.min(x,window.innerWidth-180)+'px'; m.style.top=Math.min(y,window.innerHeight-80)+'px'; setTimeout(()=>document.addEventListener('click',()=>{ m.style.display='none'; },{once:true}),100); }
+function showCtxMenu(x,y){
+  const m=document.getElementById('ctx-menu');
+  m.style.display='block';
+  m.style.left=Math.min(x,window.innerWidth-180)+'px';
+  m.style.top=Math.min(y,window.innerHeight-80)+'px';
+  setTimeout(()=>document.addEventListener('click',()=>m.style.display='none',{once:true}),100);
+}
 
 window.deleteMessage = async function(){
-  if(!selectedMsgKey||!activeChat)return;
-  await remove(ref(db,`messages/${getChatId(currentUser.phone,activeChat.phone)}/${selectedMsgKey}`));
+  if(!selectedMsgKey||!activeChat) return;
+  const chatId=getChatId(currentUser.phone,activeChat.phone);
+  await remove(ref(db,`Messages/${chatId}/${selectedMsgKey}`));
   document.getElementById('ctx-menu').style.display='none';
   showToast('Message deleted');
 };
@@ -1051,59 +1489,88 @@ window.deleteMessage = async function(){
 window.sendMessage = async function(){
   const input=document.getElementById('chat-input');
   const text=input.value.trim();
-  if(!text||!activeChat)return;
+  if(!text||!activeChat) return;
   input.value='';
   const chatId=getChatId(currentUser.phone,activeChat.phone);
-  const mycp=cleanPhone(currentUser.phone);
-  const otherCp=cleanPhone(activeChat.phone);
-  const msgRef=push(ref(db,`messages/${chatId}`));
   const ts=Date.now();
-  await set(msgRef,{text,sender:currentUser.phone,receiver:activeChat.phone,ts,delivered:false,seen:false});
-  await update(userChatRef(mycp,otherCp),{lastMsg:text,lastMsgTime:ts});
-  // Update/create contact entry on receiver side
-  const recvSnap=await get(userChatRef(otherCp,mycp));
-  const existing=recvSnap.exists()?recvSnap.val():{};
-  await set(userChatRef(otherCp,mycp),{...existing,name:currentUser.name,phone:currentUser.phone,photoURL:currentUser.photoURL||'',bio:currentUser.bio||'',lastMsg:text,lastMsgTime:ts,unread:(existing.unread||0)+1});
-  set(ref(db,`typing/${chatId}/${mycp}`),false);
+
+  // Push message to Messages/{chatId}
+  const msgRef=push(messagesRef(chatId));
+  await set(msgRef,{ text, sender:currentUser.phone, receiver:activeChat.phone, ts, delivered:false, seen:false });
+
+  // Update my Chatting entry for this contact
+  await update(chattingContactRef(currentUser.name,currentUser.phone,activeChat.phone),{ lastMsg:text, lastMsgTime:ts });
+
+  // Update (or create) receiver's Chatting entry for me
+  const otherKey = await findUserKeyByPhone(activeChat.phone);
+  if(otherKey){
+    const recvSnap=await get(ref(db,`Users/${otherKey}/Chatting/${cleanPhone(currentUser.phone)}`));
+    const existing=recvSnap.exists()?recvSnap.val():{};
+    await set(ref(db,`Users/${otherKey}/Chatting/${cleanPhone(currentUser.phone)}`),{
+      ...existing,
+      name:currentUser.name, phone:currentUser.phone,
+      photoURL:currentUser.photoURL||'', bio:currentUser.bio||'',
+      lastMsg:text, lastMsgTime:ts, unread:(existing.unread||0)+1
+    });
+  }
+
+  set(typingRef(chatId,currentUser.phone),false);
   showInAppNotif(currentUser.name,text,currentUser.photoURL);
 };
 
 window.handleTyping = function(){
-  if(!activeChat)return;
+  if(!activeChat) return;
   const chatId=getChatId(currentUser.phone,activeChat.phone);
-  const mycp=cleanPhone(currentUser.phone);
-  set(ref(db,`typing/${chatId}/${mycp}`),true);
+  set(typingRef(chatId,currentUser.phone),true);
   clearTimeout(typingTimeout);
-  typingTimeout=setTimeout(()=>set(ref(db,`typing/${chatId}/${mycp}`),false),2000);
+  typingTimeout=setTimeout(()=>set(typingRef(chatId,currentUser.phone),false),2000);
 };
 
 function markAsRead(){
-  if(!activeChat)return;
-  const mycp=cleanPhone(currentUser.phone);
-  const otherCp=cleanPhone(activeChat.phone);
-  update(userChatRef(mycp,otherCp),{unread:0});
+  if(!activeChat) return;
+  update(chattingContactRef(currentUser.name,currentUser.phone,activeChat.phone),{unread:0});
   const chatId=getChatId(currentUser.phone,activeChat.phone);
-  get(ref(db,`messages/${chatId}`)).then(snap=>{
-    if(!snap.exists())return;
-    snap.forEach(child=>{ if(child.val().sender!==currentUser.phone&&!child.val().seen){ update(ref(db,`messages/${chatId}/${child.key}`),{seen:true,delivered:true}); } });
+  get(messagesRef(chatId)).then(snap=>{
+    if(!snap.exists()) return;
+    snap.forEach(child=>{
+      if(child.val().sender!==currentUser.phone&&!child.val().seen){
+        update(ref(db,`Messages/${chatId}/${child.key}`),{seen:true,delivered:true});
+      }
+    });
   });
 }
 
-// ── SATELLITE MODE ──
-function openSatellitePinModal(){ ['pin-0','pin-1','pin-2','pin-3'].forEach(id=>{ document.getElementById(id).value=''; }); openModal('modal-satellite-pin'); setTimeout(()=>document.getElementById('pin-0').focus(),100); }
+/* ── SATELLITE MODE ── */
+function openSatellitePinModal(){
+  ['pin-0','pin-1','pin-2','pin-3'].forEach(id=>document.getElementById(id).value='');
+  openModal('modal-satellite-pin');
+  setTimeout(()=>document.getElementById('pin-0').focus(),100);
+}
 
-window.pinNext = function(i){ if(document.getElementById(`pin-${i}`).value.length===1&&i<3){ document.getElementById(`pin-${i+1}`).focus(); } };
+window.pinNext = function(i){
+  if(document.getElementById(`pin-${i}`).value.length===1&&i<3) document.getElementById(`pin-${i+1}`).focus();
+};
 
 window.verifySatellitePin = function(){
   const entered=['pin-0','pin-1','pin-2','pin-3'].map(id=>document.getElementById(id).value).join('');
   const contact=pendingChatContact;
-  if(!contact)return;
-  const saved=currentUser.satellitePin;
-  if(entered===saved){ closeModal('modal-satellite-pin'); openChat(contact); pendingChatContact=null; }
-  else { showToast('Wrong PIN'); ['pin-0','pin-1','pin-2','pin-3'].forEach(id=>document.getElementById(id).value=''); document.getElementById('pin-0').focus(); }
+  if(!contact) return;
+  if(entered===currentUser.satellitePin){
+    closeModal('modal-satellite-pin'); openChat(contact); pendingChatContact=null;
+  } else {
+    showToast('Wrong PIN');
+    ['pin-0','pin-1','pin-2','pin-3'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('pin-0').focus();
+  }
 };
 
-window.openSatelliteSettings = function(){ document.getElementById('satellite-pin-set').value=''; document.getElementById('satellite-pin-confirm').value=''; document.getElementById('satellite-pin-current').value=''; openModal('modal-satellite-settings'); closeModal('modal-chat-options'); };
+window.openSatelliteSettings = function(){
+  document.getElementById('satellite-pin-set').value='';
+  document.getElementById('satellite-pin-confirm').value='';
+  document.getElementById('satellite-pin-current').value='';
+  openModal('modal-satellite-settings');
+  closeModal('modal-chat-options');
+};
 
 window.saveSatellitePin = async function(){
   const currentPin=document.getElementById('satellite-pin-current').value.trim();
@@ -1111,7 +1578,6 @@ window.saveSatellitePin = async function(){
   const confirmPin=document.getElementById('satellite-pin-confirm').value.trim();
   if(newPin.length!==4||isNaN(newPin)){ showToast('Enter a valid 4-digit PIN'); return; }
   if(newPin!==confirmPin){ showToast('PINs do not match'); return; }
-  // If user has existing PIN, verify it first
   if(currentUser.satellitePin&&currentPin!==currentUser.satellitePin){ showToast('Current PIN is incorrect'); return; }
   currentUser.satellitePin=newPin;
   await saveUserProfile();
@@ -1120,39 +1586,52 @@ window.saveSatellitePin = async function(){
 };
 
 window.toggleSatelliteForChat = function(){
-  if(!activeChat)return;
+  if(!activeChat) return;
   const cp=cleanPhone(activeChat.phone);
   const tog=document.getElementById('satellite-chat-toggle');
   if(tog.checked){
     if(!currentUser.satellitePin){ showToast('Set a Satellite PIN first in settings'); tog.checked=false; return; }
     localStorage.setItem(`satellite_${cp}`,'1');
     showToast('Satellite Mode enabled!');
-  } else { localStorage.removeItem(`satellite_${cp}`); showToast('Satellite Mode disabled'); }
+  } else {
+    localStorage.removeItem(`satellite_${cp}`);
+    showToast('Satellite Mode disabled');
+  }
   document.getElementById('satellite-chat-status').textContent=tog.checked?'Enabled for this chat':'Enable for this chat';
   loadContacts();
 };
 
-// ── CHAT OPTIONS ──
+/* ── CHAT OPTIONS ── */
 window.openChatOptions = function(){ openModal('modal-chat-options'); };
-window.clearChatHistory = async function(){ if(!activeChat)return; await remove(ref(db,`messages/${getChatId(currentUser.phone,activeChat.phone)}`)); closeModal('modal-chat-options'); showToast('Chat cleared'); };
-window.removeContact = async function(){
-  if(!activeChat)return;
-  const mycp=cleanPhone(currentUser.phone);
-  await remove(userChatRef(mycp,cleanPhone(activeChat.phone)));
-  closeModal('modal-chat-options'); backToHome(); showToast('Contact removed');
+
+window.clearChatHistory = async function(){
+  if(!activeChat) return;
+  const chatId=getChatId(currentUser.phone,activeChat.phone);
+  await remove(ref(db,`Messages/${chatId}`));
+  closeModal('modal-chat-options');
+  showToast('Chat cleared');
 };
 
-// ── SETTINGS ──
-window.changeProfilePic = function(input){ handleProfilePicSelect(input,'settings'); };
+window.removeContact = async function(){
+  if(!activeChat) return;
+  await remove(chattingContactRef(currentUser.name,currentUser.phone,activeChat.phone));
+  closeModal('modal-chat-options');
+  backToHome();
+  showToast('Contact removed');
+};
 
+/* ── SETTINGS ── */
 window.removeProfilePic = async function(){
-  // Remove from storage
   if(currentUser.photoURL){
-    try{ const imgRef=sref(storage,`avatars/${cleanPhone(currentUser.phone)}`); await deleteObject(imgRef); }catch(e){}
+    try {
+      const storageRef=sRef(storage,`avatars/${cleanPhone(currentUser.phone)}.jpg`);
+      await deleteObject(storageRef);
+    } catch(e){ console.warn('Delete storage:',e); }
   }
   currentUser.photoURL='';
   await saveUserProfile();
-  updateHeaderUI(); updateSettingsUI(); showToast('Profile picture removed');
+  updateHeaderUI(); updateSettingsUI();
+  showToast('Profile picture removed');
 };
 
 let editingField='';
@@ -1173,44 +1652,97 @@ window.saveEditField = async function(){
   if(!val){ showToast('Field cannot be empty'); return; }
   currentUser[editingField]=val;
   await saveUserProfile();
-  updateSettingsUI(); closeModal('modal-edit'); showToast('Updated!');
+  // Also update all contacts' Chatting entries that reference this user (name/email/bio change)
+  if(['name','bio','email'].includes(editingField)){
+    await propagateProfileUpdate();
+  }
+  updateSettingsUI();
+  closeModal('modal-edit');
+  showToast('Updated!');
 };
 
-window.toggleDarkMode = function(on){ if(on){ document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('idchat_dark','true'); } else { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('idchat_dark','false'); } if(document.getElementById('dark-mode-toggle2')) document.getElementById('dark-mode-toggle2').checked=on; };
-window.syncDarkMode = function(on){ document.getElementById('dark-mode-toggle').checked=on; toggleDarkMode(on); };
-function applyDarkMode(){ if(localStorage.getItem('idchat_dark')==='true'){ document.documentElement.setAttribute('data-theme','dark'); document.getElementById('dark-mode-toggle').checked=true; } }
-
-window.logout = function(){
-  if(!confirm('Log out? Your data will be saved.'))return;
-  if(currentUser){ set(ref(db,`presence/${cleanPhone(currentUser.phone)}`),{online:false,lastSeen:Date.now()}); }
-  localStorage.removeItem('idchat_user');
-  currentUser=null; contacts={};
-  showScreen('screen-register'); showToast('Logged out');
-};
-
-window.deleteAccount = async function(){
-  if(!confirm('Delete your account? This will permanently remove ALL your data and cannot be undone.'))return;
-  if(!currentUser)return;
-  const cp=cleanPhone(currentUser.phone);
-  showToast('Deleting account...');
+// When user changes name/bio/email, push the update to all contacts' Chatting entries
+async function propagateProfileUpdate(){
   try {
-    // Remove profile picture from storage
-    if(currentUser.photoURL){ try{ await deleteObject(sref(storage,`avatars/${cp}`)); }catch(e){} }
-    // Remove presence
-    await remove(ref(db,`presence/${cp}`));
-    // Remove all messages in chats
-    const chatsSnap=await get(ref(db,`users/${cp}/chats`));
-    if(chatsSnap.exists()){
-      const chatKeys=Object.keys(chatsSnap.val());
-      for(const otherCp of chatKeys){
-        const chatId=getChatId(currentUser.phone,otherCp);
-        await remove(ref(db,`messages/${chatId}`));
-        // Remove this user from other person's contact list
-        await remove(userChatRef(otherCp,cp));
+    const snap=await get(chattingRef(currentUser.name,currentUser.phone));
+    if(!snap.exists()) return;
+    const mycp=cleanPhone(currentUser.phone);
+    for(const cp of Object.keys(snap.val())){
+      const otherKey=await findUserKeyByPhone(cp);
+      if(otherKey){
+        const chatRef=ref(db,`Users/${otherKey}/Chatting/${mycp}`);
+        const existing=await get(chatRef);
+        if(existing.exists()){
+          await update(chatRef,{
+            name:currentUser.name,
+            bio:currentUser.bio||'',
+            photoURL:currentUser.photoURL||''
+          });
+        }
       }
     }
-    // Remove user profile + chats node
-    await remove(ref(db,`users/${cp}`));
+  } catch(e){ console.warn('propagateProfileUpdate:', e); }
+}
+
+window.toggleDarkMode = function(on){
+  if(on){ document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('idchat_dark','true'); }
+  else { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('idchat_dark','false'); }
+  const dm2=document.getElementById('dark-mode-toggle2');
+  if(dm2) dm2.checked=on;
+};
+window.syncDarkMode = function(on){
+  document.getElementById('dark-mode-toggle').checked=on;
+  toggleDarkMode(on);
+};
+function applyDarkMode(){
+  if(localStorage.getItem('idchat_dark')==='true'){
+    document.documentElement.setAttribute('data-theme','dark');
+    const t=document.getElementById('dark-mode-toggle'); if(t) t.checked=true;
+  }
+}
+
+window.logout = function(){
+  if(!confirm('Log out? Your data will be saved.')) return;
+  if(currentUser) set(presenceRef(currentUser.phone),{online:false,lastSeen:Date.now()});
+  localStorage.removeItem('idchat_user');
+  currentUser=null; contacts={};
+  showScreen('screen-register');
+  showToast('Logged out');
+};
+
+/* ── DELETE ACCOUNT ─────────────────────────────────────────────────────────
+   Removes:
+   • Storage: avatars/{phone}.jpg
+   • Presence/{phone}
+   • Messages for all chats
+   • Other users' Chatting/{myPhone} entries
+   • Users/{Name_phone}/ (entire user node)
+──────────────────────────────────────────────────────────────────────────── */
+window.deleteAccount = async function(){
+  if(!confirm('Delete your account? This will permanently remove ALL your data and cannot be undone.')) return;
+  if(!currentUser) return;
+  showToast('Deleting account...');
+  try {
+    const cp=cleanPhone(currentUser.phone);
+    // 1. Remove profile pic from storage
+    if(currentUser.photoURL){
+      try{ await deleteObject(sRef(storage,`avatars/${cp}.jpg`)); } catch(e){}
+    }
+    // 2. Remove presence
+    await remove(presenceRef(currentUser.phone));
+    // 3. For each contact: delete messages + remove me from their Chatting
+    const snap=await get(chattingRef(currentUser.name,currentUser.phone));
+    if(snap.exists()){
+      for(const otherCp of Object.keys(snap.val())){
+        const chatId=getChatId(currentUser.phone,otherCp);
+        await remove(ref(db,`Messages/${chatId}`));
+        const otherKey=await findUserKeyByPhone(otherCp);
+        if(otherKey) await remove(ref(db,`Users/${otherKey}/Chatting/${cp}`));
+      }
+    }
+    // 4. Remove entire user node
+    const key=userKey(currentUser.name,currentUser.phone);
+    await remove(ref(db,`Users/${key}`));
     localStorage.removeItem('idchat_user');
     currentUser=null; contacts={};
     showScreen('screen-register');
@@ -1219,22 +1751,26 @@ window.deleteAccount = async function(){
 };
 
 window.clearAllChats = async function(){
-  if(!currentUser||!confirm('Clear all chat history?'))return;
-  const cp=cleanPhone(currentUser.phone);
-  const chatsSnap=await get(ref(db,`users/${cp}/chats`));
-  if(chatsSnap.exists()){
-    for(const otherCp of Object.keys(chatsSnap.val())){
-      const chatId=getChatId(currentUser.phone,otherCp);
-      await remove(ref(db,`messages/${chatId}`));
+  if(!currentUser||!confirm('Clear all chat history?')) return;
+  const snap=await get(chattingRef(currentUser.name,currentUser.phone));
+  if(snap.exists()){
+    for(const cp of Object.keys(snap.val())){
+      await remove(ref(db,`Messages/${getChatId(currentUser.phone,cp)}`));
     }
   }
   showToast('All chats cleared');
 };
 
-window.filterChats = function(q){ document.querySelectorAll('.chat-item').forEach(el=>{ const name=el.querySelector('.chat-name')?.textContent||''; el.style.display=name.toLowerCase().includes(q.toLowerCase())?'':'none'; }); };
-window.showTab = function(tab,btn){ document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); };
-
-if(localStorage.getItem('idchat_dark')==='true'){ document.documentElement.setAttribute('data-theme','dark'); }
+window.filterChats = function(q){
+  document.querySelectorAll('.chat-item').forEach(el=>{
+    const name=el.querySelector('.chat-name')?.textContent||'';
+    el.style.display=name.toLowerCase().includes(q.toLowerCase())?'':'none';
+  });
+};
+window.showTab = function(tab,btn){
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+};
 </script>
 </body>
 </html>
