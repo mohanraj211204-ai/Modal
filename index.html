@@ -2998,6 +2998,22 @@
                 <div class="brand-sub" data-i18n="Money is Value in the World">Money is Value in the World</div>
             </div>
         </div>
+        <button class="fab qr-fab" onclick="launchPreferredUPI()">
+
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="2" stroke-linecap="round"
+stroke-linejoin="round">
+
+<rect x="3" y="3" width="5" height="5"></rect>
+<rect x="16" y="3" width="5" height="5"></rect>
+<rect x="3" y="16" width="5" height="5"></rect>
+<path d="M16 16h1v1h-1z"></path>
+<path d="M20 16h1v1h-1z"></path>
+<path d="M16 20h1v1h-1z"></path>
+
+</svg>
+
+</button>
         <div class="header-right">
             <button class="hbtn" onclick="openBalanceModal()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
@@ -3051,6 +3067,8 @@
 
     
 
+    
+
     <!-- FILTER BAR -->
     <div class="filter-bar" id="filterBar">
         <select class="filter-select" id="filterType" onchange="renderAll()">
@@ -3066,22 +3084,7 @@
         </select>
         <input type="text" class="filter-input" id="searchQ" placeholder="Search..." oninput="renderAll()" data-i18n-placeholder="search">
     </div>
-    <button class="fab qr-fab" onclick="launchPreferredUPI()">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-stroke-width="2" stroke-linecap="round"
-stroke-linejoin="round">
-
-<rect x="3" y="3" width="5" height="5"></rect>
-<rect x="16" y="3" width="5" height="5"></rect>
-<rect x="3" y="16" width="5" height="5"></rect>
-<path d="M16 16h1v1h-1z"></path>
-<path d="M20 16h1v1h-1z"></path>
-<path d="M16 20h1v1h-1z"></path>
-
-</svg>
-
-</button>
+    
 
     <!-- MAIN CONTENT -->
     <div class="main-content">
@@ -3122,6 +3125,8 @@ stroke-linejoin="round">
         <span class="notes-fab-badge" id="notesFabBadge">0</span>
     </button>
 
+    
+
     <!-- CALCULATOR FAB -->
     <button class="calc-fab" id="calcFab" onclick="toggleCalc()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8.01" y2="10" stroke-width="2.5"/><line x1="12" y1="10" x2="12.01" y2="10" stroke-width="2.5"/><line x1="16" y1="10" x2="16.01" y2="10" stroke-width="2.5"/><line x1="8" y1="14" x2="8.01" y2="14" stroke-width="2.5"/><line x1="12" y1="14" x2="12.01" y2="14" stroke-width="2.5"/><line x1="16" y1="14" x2="16.01" y2="14" stroke-width="2.5"/><line x1="8" y1="18" x2="8.01" y2="18" stroke-width="2.5"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2.5"/><line x1="16" y1="18" x2="16.01" y2="18" stroke-width="2.5"/></svg>
@@ -3154,6 +3159,7 @@ stroke-linejoin="round">
             </div>
         </div>
     </div>
+    
 
     <!-- FAB -->
     <div class="fab-overlay" id="fabOverlay" onclick="closeFabMenu()"></div>
