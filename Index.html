@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Customer Shop</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#141e30,#243b55);
+    min-height:100vh;
+    padding:20px;
+    color:white;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.header h1{
+    font-size:32px;
+}
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(12px);
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 5px 20px rgba(0,0,0,0.3);
+}
+
+.card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+
+.card-content{
+    padding:15px;
+}
+
+.product-name{
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+.price{
+    color:#00ff95;
+    font-size:18px;
+    margin-bottom:15px;
+}
+
+.qty-box{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
+}
+
+.qty-btn{
+    width:38px;
+    height:38px;
+    border:none;
+    border-radius:50%;
+    font-size:22px;
+    cursor:pointer;
+    background:#ffffff;
+    color:#111;
+    font-weight:bold;
+}
+
+.qty{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.cart-box{
+    margin-top:35px;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(12px);
+    border-radius:20px;
+    padding:20px;
+}
+
+.cart-box h2{
+    margin-bottom:15px;
+}
+
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+}
+
+.total{
+    margin-top:20px;
+    font-size:24px;
+    color:#00ff95;
+    font-weight:bold;
+}
+
+.order-btn{
+    width:100%;
+    margin-top:20px;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    background:#00c853;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.delivery-box{
+    display:none;
+    margin-top:20px;
+}
+
+.delivery-btn{
+    width:100%;
+    padding:14px;
+    margin-top:10px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.pickup{
+    background:#2196f3;
+    color:white;
+}
+
+.home{
+    background:#ff9800;
+    color:white;
+}
+
+.success-box{
+    display:none;
+    margin-top:25px;
+    text-align:center;
+    background:rgba(255,255,255,0.1);
+    padding:20px;
+    border-radius:20px;
+}
+
+.order-id{
+    margin-top:10px;
+    font-size:28px;
+    color:#00ff95;
+    font-weight:bold;
+}
+
+.qr img{
+    margin-top:15px;
+    width:180px;
+    border-radius:15px;
+    background:white;
+    padding:10px;
+}
+
+.payment-box{
+    margin-top:20px;
+}
+
+.payment-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    margin-top:10px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.cash{
+    background:#4caf50;
+    color:white;
+}
+
+.upi{
+    background:#673ab7;
+    color:white;
+}
+
+.upi-message{
+    display:none;
+    margin-top:15px;
+    color:#00ff95;
+    font-size:18px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Customer Order Page</h1>
+</div>
+
+<div class="products" id="products"></div>
+
+<div class="cart-box">
+
+    <h2>Your Order</h2>
+
+    <div id="cartItems"></div>
+
+    <div class="total" id="total">
+        Total : ₹0
+    </div>
+
+    <button class="order-btn"
+    onclick="showDelivery()">
+        Place Order
+    </button>
+
+    <div class="delivery-box"
+    id="deliveryBox">
+
+        <button class="delivery-btn pickup"
+        onclick="confirmOrder('Pickup')">
+            Pickup From Shop
+        </button>
+
+        <button class="delivery-btn home"
+        onclick="confirmOrder('Home Delivery')">
+            Home Delivery
+        </button>
+
+    </div>
+
+    <div class="success-box"
+    id="successBox">
+
+        <h2>Thanks For Your Order ❤️</h2>
+
+        <div class="order-id"
+        id="orderId"></div>
+
+        <div class="qr">
+            <img id="qrImage">
+        </div>
+
+        <p id="deliveryType"></p>
+
+        <div class="payment-box">
+
+            <button class="payment-btn cash"
+            onclick="cashPayment()">
+                Cash Payment
+            </button>
+
+            <button class="payment-btn upi"
+            onclick="upiPayment()">
+                UPI Payment
+            </button>
+
+        </div>
+
+        <div class="upi-message"
+        id="upiMessage">
+            Check Your UPI App To Complete Payment
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- Firebase -->
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+
+import {
+getDatabase,
+ref,
+onValue,
+push,
+set,
+update
+}
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
+
+
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyBd_xiSi43wllkNpSwxhNMesa3SjAPvfEo",
+
+    authDomain: "shop-d769e.firebaseapp.com",
+
+    databaseURL:
+    "https://shop-d769e-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+    projectId: "shop-d769e",
+
+    storageBucket:
+    "shop-d769e.firebasestorage.app",
+
+    messagingSenderId:
+    "702914663637",
+
+    appId:
+    "1:702914663637:web:d683cd6340468e9a33fe5c"
+
+};
+
+
+
+const app = initializeApp(firebaseConfig);
+
+const database = getDatabase(app);
+
+
+
+let productsData = {};
+
+let cart = {};
+
+
+
+const productsContainer =
+document.getElementById("products");
+
+
+
+/* Load Products */
+
+const productsRef =
+ref(database,"products");
+
+onValue(productsRef,(snapshot)=>{
+
+    const data = snapshot.val();
+
+    productsContainer.innerHTML = "";
+
+    productsData = data;
+
+    for(let id in data){
+
+        let product = data[id];
+
+        if(product.stock > 0){
+
+            cart[id] = 0;
+
+            productsContainer.innerHTML += `
+
+            <div class="card">
+
+                <img src="${product.image}">
+
+                <div class="card-content">
+
+                    <div class="product-name">
+                        ${product.name}
+                    </div>
+
+                    <div class="price">
+                        ₹${product.price}
+                    </div>
+
+                    <div class="qty-box">
+
+                        <button class="qty-btn"
+                        onclick="changeQty('${id}',-1)">
+                            -
+                        </button>
+
+                        <div class="qty"
+                        id="qty-${id}">
+                            0
+                        </div>
+
+                        <button class="qty-btn"
+                        onclick="changeQty('${id}',1)">
+                            +
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            `;
+
+        }
+
+    }
+
+});
+
+
+
+/* Change Quantity */
+
+window.changeQty = function(id,value){
+
+    let stock = productsData[id].stock;
+
+    cart[id] += value;
+
+    if(cart[id] < 0){
+        cart[id] = 0;
+    }
+
+    if(cart[id] > stock){
+        cart[id] = stock;
+        alert("Stock Limit Reached");
+    }
+
+    document.getElementById(`qty-${id}`)
+    .innerText = cart[id];
+
+    updateCart();
+
+}
+
+
+
+/* Update Cart */
+
+function updateCart(){
+
+    let cartItems =
+    document.getElementById("cartItems");
+
+    cartItems.innerHTML = "";
+
+    let total = 0;
+
+    for(let id in cart){
+
+        if(cart[id] > 0){
+
+            let product = productsData[id];
+
+            let subtotal =
+            cart[id] * product.price;
+
+            total += subtotal;
+
+            cartItems.innerHTML += `
+
+            <div class="cart-item">
+
+                <span>
+                    ${product.name} x ${cart[id]}
+                </span>
+
+                <span>
+                    ₹${subtotal}
+                </span>
+
+            </div>
+
+            `;
+
+        }
+
+    }
+
+    document.getElementById("total")
+    .innerText =
+    `Total : ₹${total}`;
+
+}
+
+
+
+/* Delivery Options */
+
+window.showDelivery = function(){
+
+    document.getElementById("deliveryBox")
+    .style.display = "block";
+
+}
+
+
+
+/* Confirm Order */
+
+window.confirmOrder = function(type){
+
+    let orderId =
+    Math.floor(100000 + Math.random()*900000);
+
+    let orderRef =
+    push(ref(database,"orders"));
+
+
+
+    let orderItems = [];
+
+    for(let id in cart){
+
+        if(cart[id] > 0){
+
+            orderItems.push({
+
+                product:
+                productsData[id].name,
+
+                qty:
+                cart[id]
+
+            });
+
+
+
+            /* Update Stock */
+
+            let newStock =
+            productsData[id].stock - cart[id];
+
+            update(
+                ref(database,
+                "products/" + id),
+
+                {
+                    stock:newStock
+                }
+
+            );
+
+        }
+
+    }
+
+
+
+    set(orderRef,{
+
+        orderId:orderId,
+
+        delivery:type,
+
+        items:orderItems,
+
+        status:"Pending"
+
+    });
+
+
+
+    document.getElementById("successBox")
+    .style.display = "block";
+
+
+
+    document.getElementById("orderId")
+    .innerText =
+    "Order ID : " + orderId;
+
+
+
+    document.getElementById("deliveryType")
+    .innerText =
+    "Delivery : " + type;
+
+
+
+    document.getElementById("qrImage")
+    .src =
+    `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${orderId}`;
+
+}
+
+
+
+/* Payments */
+
+window.cashPayment = function(){
+
+    alert("Cash Payment Selected");
+
+}
+
+
+
+window.upiPayment = function(){
+
+    document.getElementById("upiMessage")
+    .style.display = "block";
+
+}
+
+</script>
+
+</body>
+  </html>
